@@ -13,4 +13,4 @@ var docenteSchema = new mongoose.Schema({
     cadeiras: [String]
 }, {versionKey : false});
 
-module.exports = mongoose.model('docente', estudanteSchema);
+module.exports = mongoose.model('docente', docenteSchema);

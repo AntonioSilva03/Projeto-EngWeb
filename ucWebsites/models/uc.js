@@ -27,4 +27,4 @@ var ucSchema = new mongoose.Schema({
     }]
 }, {versionKey : false});
 
-module.exports = mongoose.model('uc', estudanteSchema);
+module.exports = mongoose.model('uc', ucSchema);
