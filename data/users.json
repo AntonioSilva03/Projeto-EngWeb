@@ -1,0 +1,31 @@
+[
+    {
+        "nome": "José Carlos Ramalho",
+        "foto": "jcr-keep.jpeg",
+        "categoria": "Professor/Investigador/Empresário",
+        "filiacao": "Dep. Informática - Universidade do Minho",
+        "email": "jcr@di.uminho.pt",
+        "webpage": "http://www.di.uminho.pt/~jcr",
+        "password": "1234",
+        "_id": "838"
+    },
+    {
+        "nome": "Tiago Manuel Queirós Barata",
+        "foto": "tiago.jpg",
+        "categoria": "Professor Convidado",
+        "filiacao": "Dep. Informática - Universidade do Minho",
+        "email": "d13753@di.uminho.pt",
+        "password": "1234",
+        "_id": "451"
+    },
+    {
+        "nome": "Luís Filipe Cunha",
+        "foto": "lfc-di.jpeg",
+        "categoria": "Professor Convidado",
+        "filiacao": "Dep. Informática - Universidade do Minho",
+        "email": "lfc@di.uminho.pt",
+        "webpage": "",
+        "password": "1234",
+        "_id": "204"
+    }
+]

@@ -2,9 +2,8 @@ var mongoose = require('mongoose');
 
 var ucSchema = new mongoose.Schema({
     _id: String,
-    nome: String,
+    titulo: String,
     sigla: String,
-    codigo: String,
     descricao: String,
     docente: String,
     ano: Number,
@@ -12,18 +11,20 @@ var ucSchema = new mongoose.Schema({
     curso: String,
     docentes: [String], // lista de ids de docentes (1º é o regente)
     inscritos: [String], // lista de ids de estudantes
-    horario: [{
-        tipoAula: String, // teorica, pratica, laboratorial
-        dia: String,
-        horaInicio: String,
-        horaFim: String,
-        edificio: String,
-        sala: String
-    }],
-    avalicao: [{
-        tipo: String, // teste, exame, projeto, ...
-        peso: Number,
+    horario: {
+        teoricas: [String], 
+        praticas: [String]
+    },
+    avalicao: [String],
+    datas: {
+        teste: String,
+        exame: String,
+        projeto: String
+    },
+    aulas: [{
+        tipo: String, // T ou P
         data: String,
+        sumario: [String]
     }]
 }, {versionKey : false});
 

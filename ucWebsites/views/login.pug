@@ -1,0 +1,16 @@
+extends layout
+
+block content
+  .w3-container(style="height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center;")
+    .w3-container.w3-center.w3-blue
+      h2(style="margin-top: 0;") Login
+
+    form(action="/login" method="POST" class="w3-container")
+      label.w3-text-blue(for="email") Email
+      input.w3-input.w3-border(type="text" name="email" id="email" required)
+
+      label.w3-text-blue(for="password") Password
+      input.w3-input.w3-border(type="password" name="password" id="password" required)
+      
+      .w3-container.w3-center
+        button.w3-button.w3-blue.w3-margin-top(type="submit") Login

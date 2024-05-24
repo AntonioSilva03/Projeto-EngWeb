@@ -23,3 +23,11 @@
 
 - Dados sobre o utilizador a guardar (sugestão):
 nome, email, filiação (estudante, docente, curso, departamento, ...), nível (administrador, produtor ou consumidor), dataRegisto (registo na plataforma), dataUltimoAcesso, password, outros campos que julgue necessários...
+
+## Como correr
+
+```shell
+cd ucWebsites
+npm install
+npm start
+```
