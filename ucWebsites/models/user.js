@@ -11,6 +11,7 @@ var userSchema = new mongoose.Schema({
     foto: String,
     filiacao: String,
     categortia: String,
+    webpage: String,
     cursos: [String],
     cadeiras: [String]
 }, {versionKey : false});
