@@ -21,18 +21,30 @@ for file in json_files:
         docentes_uc = []
 
         for docente in data['docentes']:
-            docente['password'] = "1234"
-            id_docente = str(random.randint(0, 1000))
+            if docente['nome'] not in [docente['nome'] for docente in lista_docentes]:
+                docente['password'] = "1234"
+                id_docente = str(random.randint(0, 1000))
 
-            if id_docente not in ids_usados:
-                ids_usados.append(id_docente)
-                docente['_id'] = id_docente
+                if id_docente not in ids_usados:
+                    ids_usados.append(id_docente)
+                    docente['_id'] = id_docente
 
-                if docente['nome'] not in [docente['nome'] for docente in lista_docentes]:
-                    lista_docentes.append(docente)
+                docente['nivel'] = 'docente'
 
-                if id_docente not in docentes_uc:
-                    docentes_uc.append(id_docente)
+                docente['ano'] = ''
+
+                docente['cursos'] = ['Licenciatura em Engenharia Informática']
+
+                lista_docentes.append(docente)
+
+            docentes_uc.append(id_docente)
+
+            lista_docentes_index = [docente['nome'] for docente in lista_docentes].index(docente['nome'])
+
+            if 'cadeiras' not in lista_docentes[lista_docentes_index]:
+                docente['cadeiras'] = [_id]
+            else:
+                lista_docentes[lista_docentes_index]['cadeiras'].append(_id)
 
         data['docentes'] = docentes_uc
 

@@ -7,7 +7,17 @@
         "email": "jcr@di.uminho.pt",
         "webpage": "http://www.di.uminho.pt/~jcr",
         "password": "1234",
-        "_id": "838"
+        "_id": "251",
+        "nivel": "docente",
+        "ano": "",
+        "cursos": [
+            "Licenciatura em Engenharia Informática"
+        ],
+        "cadeiras": [
+            "48",
+            "158",
+            "585"
+        ]
     },
     {
         "nome": "Tiago Manuel Queirós Barata",
@@ -16,7 +26,15 @@
         "filiacao": "Dep. Informática - Universidade do Minho",
         "email": "d13753@di.uminho.pt",
         "password": "1234",
-        "_id": "451"
+        "_id": "732",
+        "nivel": "docente",
+        "ano": "",
+        "cursos": [
+            "Licenciatura em Engenharia Informática"
+        ],
+        "cadeiras": [
+            "158"
+        ]
     },
     {
         "nome": "Luís Filipe Cunha",
@@ -26,6 +44,14 @@
         "email": "lfc@di.uminho.pt",
         "webpage": "",
         "password": "1234",
-        "_id": "204"
+        "_id": "711",
+        "nivel": "docente",
+        "ano": "",
+        "cursos": [
+            "Licenciatura em Engenharia Informática"
+        ],
+        "cadeiras": [
+            "585"
+        ]
     }
 ]
