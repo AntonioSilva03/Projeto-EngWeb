@@ -31,3 +31,9 @@ cd ucWebsites
 npm install
 npm start
 ```
+
+## Portas
+
+- API -> 3000
+- Auth -> 7778
+- Frontend -> 7777

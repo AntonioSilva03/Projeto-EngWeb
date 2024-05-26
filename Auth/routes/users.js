@@ -1,8 +1,9 @@
 var express = require('express');
 var router = express.Router();
 
+/* GET users listing. */
 router.get('/', function(req, res, next) {
-  res.redirect('/users/login');
+  res.send('respond with a resource');
 });
 
 module.exports = router;
