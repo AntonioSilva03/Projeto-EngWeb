@@ -2,17 +2,12 @@ var Uc = require('../models/uc');
 
 // listar todas as uc (ordenadas por nome)
 module.exports.list = () => {
-    return Uc
-        .find()
-        .sort({nome: 1})
-        .exec()
+    return Uc.find().exec()
 };
 
 // consultar uma uc por id
 module.exports.lookUp = id => {
-    return Uc
-        .findOne({_id: id})
-        .exec()
+    return Uc.findOne({_id: id}).exec()
 };
 
 // inserir uma uc
@@ -32,8 +27,5 @@ module.exports.update = (id, uc, idDocente) => {
 
 // listar alunos inscritos numa uc
 module.exports.listInscritos = id => {
-    return Uc
-        .findOne({_id: id})
-        .populate('inscritos')
-        .exec()
+    return Uc.findOne({_id: id}).populate('inscritos').exec()
 };

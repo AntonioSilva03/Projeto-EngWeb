@@ -24,12 +24,13 @@
 - Dados sobre o utilizador a guardar (sugestão):
 nome, email, filiação (estudante, docente, curso, departamento, ...), nível (administrador, produtor ou consumidor), dataRegisto (registo na plataforma), dataUltimoAcesso, password, outros campos que julgue necessários...
 
-## Como correr
+## Setup mongo
 
-```shell
-cd ucWebsites
-npm install
-npm start
+```
+python launch_container.py ucWebsites users ./users.json ucs ./ucs.json ficheiros ./ficheiros.json
+docker exec -it data-mongodb-1 mongosh
+use ucWebsites
+db.createCollection("ficheiros")
 ```
 
 ## Portas
