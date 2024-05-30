@@ -83,7 +83,7 @@ router.get('/cadeiras/:_id/alunos', Auth.auth, function(req, res, next) {
 
 // POST /login
 router.post('/login', function(req, res, next) {
-  axios.post('http://localhost:7778/users/login', req.body).then(dados => {return dados})
+  axios.post('http://localhost:7778/users/login', req.body)
     .then(response => {
       res.cookie('token', response.data.token)
       res.redirect('/cadeiras')
@@ -96,7 +96,7 @@ router.post('/login', function(req, res, next) {
 
 // POST /register
 router.post('/register', function(req, res, next) {
-  axios.post('http://localhost:7778/users/register', req.body).then(dados => {return dados})
+  axios.post('http://localhost:7778/users/register', req.body)
     .then(response => {
       res.cookie('token', response.data.token)
       res.redirect('/login')

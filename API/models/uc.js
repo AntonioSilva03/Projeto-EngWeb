@@ -1,7 +1,8 @@
 var mongoose = require('mongoose');
 
 var ucSchema = new mongoose.Schema({
-    _id: String,
+    _id: mongoose.Schema.Types.ObjectId,
+    numero: String,
     titulo: String,
     sigla: String,
     ano: Number,

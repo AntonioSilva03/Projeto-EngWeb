@@ -63,3 +63,14 @@ module.exports.remove = id => {
                     throw new Error('Error removing user')
                 })
 }
+
+module.exports.getUserLevel = email => {
+    return User.findOne({email: email})
+                .exec()
+                .then(dados => {
+                    return dados.nivel
+                })
+                .catch(erro => {
+                    throw new Error('Error getting user level')
+                })
+}

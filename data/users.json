@@ -7,16 +7,16 @@
         "email": "jcr@di.uminho.pt",
         "webpage": "http://www.di.uminho.pt/~jcr",
         "password": "1234",
-        "_id": "251",
+        "numero": "394",
         "nivel": "docente",
         "ano": "",
         "cursos": [
             "Licenciatura em Engenharia Informática"
         ],
         "cadeiras": [
-            "48",
-            "158",
-            "585"
+            "711",
+            "10",
+            "264"
         ]
     },
     {
@@ -26,14 +26,14 @@
         "filiacao": "Dep. Informática - Universidade do Minho",
         "email": "d13753@di.uminho.pt",
         "password": "1234",
-        "_id": "732",
+        "numero": "817",
         "nivel": "docente",
         "ano": "",
         "cursos": [
             "Licenciatura em Engenharia Informática"
         ],
         "cadeiras": [
-            "158"
+            "10"
         ]
     },
     {
@@ -44,14 +44,14 @@
         "email": "lfc@di.uminho.pt",
         "webpage": "",
         "password": "1234",
-        "_id": "711",
+        "numero": "59",
         "nivel": "docente",
         "ano": "",
         "cursos": [
             "Licenciatura em Engenharia Informática"
         ],
         "cadeiras": [
-            "585"
+            "264"
         ]
     }
 ]

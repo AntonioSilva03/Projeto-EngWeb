@@ -27,13 +27,18 @@ function auth(req, res, next) {
     }
 }
 
+// GET /users
+router.get('/users', function(req, res) {
+    User.list()
+        .then(data => res.jsonp(data))
+        .catch(error => res.status(500).jsonp(error))
+});
+
 // GET /cadeiras
 router.get('/cadeiras', function(req, res) {
-    if (req.user) {
-        Uc.list()
-            .then(data => res.jsonp(data))
-            .catch(error => res.status(500).jsonp(error))
-    }
+    Uc.list()
+        .then(data => res.jsonp(data))
+        .catch(error => res.status(500).jsonp(error))
 });
 
 // GET /cadeiras/:_id

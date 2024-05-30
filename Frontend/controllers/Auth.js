@@ -1,7 +1,7 @@
 const axios = require('axios');
 var jwt = require('jsonwebtoken');
 
-module.exports.verificaAutenticacao = (req, res, next) => {
+module.exports.auth = (req, res, next) => {
     let token = req.cookies.token
     if (token) {
         jwt.verify(token, "EW2024", function (e, payload) {
@@ -21,7 +21,7 @@ module.exports.verificaAutenticacao = (req, res, next) => {
     }
 }
 
-module.exports.verificaAdmin = (req, res, next) => {
+module.exports.isAdmin = (req, res, next) => {
     let token = req.cookies.token
     if (token) {
         jwt.verify(token, "EW2024", function (e, payload) {

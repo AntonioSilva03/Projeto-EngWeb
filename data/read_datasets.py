@@ -16,7 +16,7 @@ for file in json_files:
         _id = str(random.randint(0, 1000))
         if _id not in ids_usados:
             ids_usados.append(_id)
-            data['_id'] = _id
+            data['numero'] = _id
 
         docentes_uc = []
 
@@ -27,7 +27,7 @@ for file in json_files:
 
                 if id_docente not in ids_usados:
                     ids_usados.append(id_docente)
-                    docente['_id'] = id_docente
+                    docente['numero'] = id_docente
 
                 docente['nivel'] = 'docente'
 

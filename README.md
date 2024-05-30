@@ -35,6 +35,6 @@ db.createCollection("ficheiros")
 
 ## Portas
 
-- API -> 3000
+- API -> 7779
 - Auth -> 7778
 - Frontend -> 7777

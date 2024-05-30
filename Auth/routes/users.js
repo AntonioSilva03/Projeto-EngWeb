@@ -22,43 +22,53 @@ router.get('/:_id', auth.verify, function (req, res) {
 });
 
 // POST /register
-router.post('/register', /*auth.verificaAcesso,*/ function(req, res) {
-  userModel.register(new userModel({ nome: req.body.nome, 
-                                      email: req.body.email,
-                                      password: req.body.password, 
-                                      level: req.body.level,
-                                      ano: req.body.ano,
-                                      foto: req.body.foto,
-                                      filiacao: req.body.filiacao,
-                                      categoria: req.body.categoria,
-                                      webpage: req.body.webpage,
-                                      cursos: req.body.cursos,
-                                      cadeiras: req.body.cadeiras  
-                                    }), 
-                req.body.password, 
-                function(err, user) {
-                  if (err) 
-                    res.jsonp({error: err, message: "Register error: " + err})
-                  else{
-                    passport.authenticate("local")(req,res,function(){
-                      jwt.sign({ username: req.user.username, level: req.user.level, 
-                        sub: 'EngWeb2024'}, 
-                        "EW2024",
-                        {expiresIn: 3600},
-                        function(e, token) {
-                          if(e) res.status(500).jsonp({error: "Erro na geração do token: " + e}) 
-                          else res.status(201).jsonp({token: token})
-                        });
-                    })
-                  }     
-  })
+router.post('/register', function(req, res) {
+  var random = Math.floor(Math.random() * 1000000);
+  const newUser = new userModel({ 
+    _id: random,
+    nome: req.body.nome, 
+    email: req.body.email,
+    password: req.body.password, 
+    nivel: req.body.nivel,
+    ano: "",
+    foto: "",
+    filiacao: req.body.filiacao,
+    categoria: req.body.categoria,
+    webpage: req.body.webpage,
+    cursos: [],
+    cadeiras: []
+  });
+
+  userModel.register(newUser, 
+    req.body.password, 
+    function(err, user) {
+      if (err) 
+        res.jsonp({error: err, message: "Register error: " + err})
+      else{
+        passport.authenticate("local")(req,res,function(){
+          jwt.sign({ username: req.user.nome, nivel: req.user.nivel,
+            sub: 'EW'}, 
+            "EW2024",
+            {expiresIn: 36000},
+            function(e, token) {
+              if(e) {
+                res.status(500)
+                console.log('erro na geração do token')
+              } 
+              else res.status(201).jsonp({token: token})
+            });
+        })
+      }     
+    })   
 });
 
 // POST /login
-router.post('/login', passport.authenticate('local'), function(req, res){
-  jwt.sign({ 
-    email: req.user.email, level: req.user.level, 
-    sub: 'EngWeb2024'}, 
+router.post('/login', passport.authenticate('local'), function(req, res) {
+  var user_level = User.getUserLevel(req.user.email)
+  jwt.sign({
+    email: req.user.email, 
+    level: user_level, 
+    sub: 'EW'}, 
     "EW2024",
     {expiresIn: 3600},
     function(e, token) {

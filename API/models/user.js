@@ -1,11 +1,12 @@
 var mongoose = require('mongoose');
 
 var userSchema = new mongoose.Schema({
-    _id: String,
+    _id: mongoose.Schema.Types.ObjectId,
+    numero: String,
     nome: String,
     email: String,
     password: String,
-    nivel: String, // admin, estudante, docente
+    nivel: String, // admin, aluno, docente
     ano: Number,
     foto: String,
     filiacao: String,
