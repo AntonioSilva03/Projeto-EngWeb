@@ -16,7 +16,7 @@ module.exports.insert = user => {
 }
 
 module.exports.update = (id, user) => {
-    return User.findByIdAndUpdate(id, user, {new: true})
+    return User.findByIdAndUpdate(id, user)
                 .exec()
 }
 

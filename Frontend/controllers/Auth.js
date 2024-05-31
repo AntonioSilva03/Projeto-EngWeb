@@ -10,8 +10,7 @@ module.exports.auth = (req, res, next) => {
             }
             else {
                 req.idUser = payload._id
-                req.isDocente = (payload.level == 'docente') // verifica se o token é referente a um utilizador que é docente
-                req.isAdmin = (payload.level == 'admin') // verifica se o token é referente a um utilizador que é administrador
+                req.nivel = payload.level
                 next()
             }
         })

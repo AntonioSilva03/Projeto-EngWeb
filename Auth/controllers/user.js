@@ -25,10 +25,6 @@ module.exports.update = (id, user) => {
                 .exec()
 }
 
-module.exports.updatePassword = (id, password) => {
-    return User.updateOne({_id: id}, password)
-}
-
 module.exports.remove = id => {
     return User.deleteOne({_id: id})
 }

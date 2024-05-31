@@ -1,0 +1,35 @@
+extends layout
+
+block content
+  header(class="w3-container w3-teal")
+    h1 #{title}
+
+  nav(class="w3-bar w3-light-grey")
+    a(href="/cadeiras" class="w3-bar-item w3-button") Cadeiras
+    a(href="/perfil" class="w3-bar-item w3-button") Perfil
+    a(href="/logout" class="w3-bar-item w3-button") Logout
+
+  div(class="w3-container")
+    form(action=`/perfil/update/${user._id}` method="post" class="w3-container w3-card-4 w3-padding")
+      label(for="nome") Nome:
+      input(type="text" id="nome" name="nome" value=user.nome class="w3-input w3-border")
+
+      label(for="email") Email:
+      input(type="text" id="email" name="email" value=user.email class="w3-input w3-border")
+
+      label(for="newPassword") Nova Password:
+      input(type="password" id="newPassword" name="newPassword" class="w3-input w3-border")
+
+      label(for="numero") Numero:
+      input(type="text" id="numero" name="numero" value=user.numero class="w3-input w3-border")
+
+      label(for="filiacao") Filiação Académica:
+      input(type="text" id="filiacao" name="filiacao" value=user.filiacao class="w3-input w3-border")
+
+      label(for="categoria") Categoria:
+      input(type="text" id="categoria" name="categoria" value=user.categoria class="w3-input w3-border")
+
+      label(for="webpage") Webpage:
+      input(type="text" id="webpage" name="webpage" value=user.webpage class="w3-input w3-border")
+
+      button(type="submit" class="w3-button w3-teal w3-margin-top") Guardar

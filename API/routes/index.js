@@ -36,9 +36,11 @@ router.get('/users', function(req, res) {
 
 // GET /cadeiras
 router.get('/cadeiras', function(req, res) {
-    Uc.list()
-        .then(data => res.jsonp(data))
-        .catch(error => res.status(500).jsonp(error))
+    if (req.user) {
+        Uc.list()
+            .then(data => res.jsonp(data))
+            .catch(error => res.status(500).jsonp(error))
+    }
 });
 
 // GET /cadeiras/:_id
@@ -92,18 +94,16 @@ router.get('/cadeiras/:_id/ficheiros/:_idFicheiro/download', auth, function(req,
 router.get('/users/:_id', auth, function(req, res) {
     if (req.user._id === req.params._id) {
         User.lookUp(req.params._id)
-            .then(data => res.jsonp(data))
+            .then(data => res.status(200).jsonp(data))
             .catch(error => res.status(500).jsonp(error))
     }
 });
 
 // GET users/:_id/cadeiras
 router.get('/users/:_id/cadeiras', auth, function(req, res) {
-    if (req.user._id === req.params._id) {
-        User.getCadeiras(req.params._id)
-            .then(data => res.jsonp(data.cadeiras))
-            .catch(error => res.status(500).jsonp(error))
-    }
+    User.getCadeiras(req.params._id)
+        .then(data => res.jsonp(data))
+        .catch(error => res.status(500).jsonp(error))
 });
 
 // POST
@@ -129,6 +129,15 @@ router.delete('/cadeiras/:_id', auth, function(req, res) {
     Uc.remove(req.params._id)
         .then(data => res.jsonp(data))
         .catch(error => res.status(500).jsonp(error))
+});
+
+// PUT /users/:_id
+router.put('/users/:_id', auth, function(req, res) {
+    if (req.user._id === req.params._id) {
+        User.update(req.params._id, req.body)
+            .then(data => res.jsonp(data))
+            .catch(error => res.status(500).jsonp(error))
+    }
 });
 
 // DELETE /cadeiras/:_id/ficheiros/:_idFicheiro (docentes ou admin)

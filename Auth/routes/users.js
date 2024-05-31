@@ -81,6 +81,7 @@ router.post('/login', function(req, res, next) {
         
         // Create JWT token
         jwt.sign({
+          _id: foundUser._id,
           email: foundUser.email, 
           level: foundUser.nivel, 
           sub: 'EW'
@@ -102,18 +103,44 @@ router.post('/login', function(req, res, next) {
   })(req, res, next);
 });
 
-// PUT /:_id
-router.put('/:_id', auth.verify, function (req, res) {
-  User.update(req.params._id, req.body)
-    .then(dados => res.status(200).jsonp({dados}))
-    .catch(erro => res.status(500).jsonp({error: erro}))
-});
+// POST /passaword
+router.post('/password', function(req, res) {
+  // Check if request body has email, password, and newPassword
+  if (!req.body.email || !req.body.newPassword) {
+    console.error("Email, password, and newPassword are required");
+    return res.status(400).jsonp({ error: 'Email, password, and newPassword are required' });
+  }
 
-// PUT /:_id/password
-router.put('/:_id/password', auth.verify, function (req, res) {
-  User.updatePassword(req.params._id, req.body)
-    .then(dados => res.status(200).jsonp({dados}))
-    .catch(erro => res.status(500).jsonp({error: erro}))
+  // Authenticate user with their current credentials
+  passport.authenticate('local', function(err, user, info) {
+    if (err) {
+      console.error("Error during authentication:", err);
+      return res.status(500).jsonp({ error: err.message });
+    }
+    if (!user) {
+      console.error("Authentication failed:", info ? info.message : 'No user');
+      return res.status(401).jsonp({ error: 'Authentication failed: ' + (info ? info.message : 'No user') });
+    }
+
+    // User authentication successful, update password
+    user.setPassword(req.body.newPassword, async function(err) {
+      if (err) {
+        console.error("Error setting new password:", err);
+        return res.status(500).jsonp({ error: err.message });
+      }
+
+      // Save user with new password
+      user.save(function(err) {
+        if (err) {
+          console.error("Error saving user:", err);
+          return res.status(500).jsonp({ error: err.message });
+        }
+
+        console.log("Password updated successfully");
+        res.status(200).jsonp({ message: "Password updated successfully" });
+      });
+    });
+  })(req, res);
 });
 
 // DELETE /:_id

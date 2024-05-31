@@ -1,0 +1,44 @@
+extends layout
+
+block content
+  header(class="w3-container w3-teal")
+    h1 #{title}
+
+  nav(class="w3-bar w3-light-grey")
+    a(href="/cadeiras" class="w3-bar-item w3-button") Cadeiras
+    a(href="/perfil" class="w3-bar-item w3-button") Perfil
+    a(href="/perfil/update" class="w3-bar-item w3-button") Editar
+    a(href="/logout" class="w3-bar-item w3-button") Logout
+
+  div(class="w3-container")
+    p Nome: #{user.nome}
+
+    p Email: #{user.email}
+
+    p Numero: #{user.numero}
+
+    p Filiação Académica: #{user.filiacao}
+
+    p Categoria: #{user.categoria}
+
+    p Webpage: #{user.webpage}
+
+    if user.nivel == 'aluno' 
+      p Curso: #{user.cursos[0]}
+
+    if user.nivel == 'docente'
+      ul(class="w3-ul w3-card-4")
+        for curso in user.cursos
+          li(class="w3-bar")
+            span(class="w3-bar-item")
+            a(href=`/cursos/${curso}`) #{curso}
+
+    p Cadeiras:
+    if user.cadeiras.lemght > 0
+      ul(class="w3-ul w3-card-4")
+        for cadeira in user.cadeiras
+          li(class="w3-bar")
+            span(class="w3-bar-item")
+            a(href=`/cadeiras/${cadeira}`) #{cadeira.nome}
+    else
+      p Sem cadeiras

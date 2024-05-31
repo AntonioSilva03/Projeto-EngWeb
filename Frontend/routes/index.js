@@ -26,24 +26,30 @@ router.get('/logout', function (req, res, next) {
 });
 
 // GET perfil
-router.get('/perfil/:_id', Auth.auth, function(req, res, next) {
+router.get('/perfil', Auth.auth, function(req, res, next) {
   API.getUserData(req.idUser, req.cookies.token)
     .then(dados =>{
-      if (dados.nivel == 'admin') {
-        res.render('perfilAdmin', {user: dados})
-      } else if (dados.nivel == 'docente') {
-        res.render('perfilDocente', {user: dados})
-      } else {
-        res.render('perfilAluno', {user: dados})
-      }
+      API.getCadeirasUser(req.idUser, req.cookies.token)
+        .then(cadeiras => {
+          res.render('perfilPage', {title: 'Perfil', user: dados.data, cadeiras: cadeiras})
+        })
     })
     .catch(erro => res.render('error', {error: erro}))
 });
 
-// GET /cadeiras (admin)
-router.get('/cadeiras', Auth.isAdmin, function(req, res, next) {
-  API.listCadeiras(req.cookies.token)
-    .then(dados => res.render('cadeirasListAdmin', {cadeiras: dados}))
+// GET /perfil/update
+router.get('/perfil/update', Auth.auth, function(req, res, next) {
+  API.getUserData(req.idUser, req.cookies.token)
+    .then(dados => res.render('perfilUpdateForm', {title: 'Editar perfil', user: dados.data}))
+    .catch(erro => res.render('error', {error: erro}))
+});
+
+// GET /cadeiras
+router.get('/cadeiras', Auth.auth, function(req, res, next) {
+  API.getCadeirasUser(req.idUser, req.cookies.token)
+    .then(dados => {
+      res.render('cadeirasList', {title: 'Cadeiras', cadeiras: dados.data, nivel: req.nivel})
+    })
     .catch(erro => res.render('error', {error: erro}))
 });
 
@@ -104,6 +110,13 @@ router.post('/register', function(req, res, next) {
     .catch(erro => {
       res.render('error', {error: erro})
     })
+});
+
+// POST /perfil/update/:_id
+router.post('/perfil/update/:_id', Auth.auth, function(req, res, next) {
+  API.updateUserData(req.params._id, req.body, req.cookies.token)
+    .then(dados => res.redirect('/perfil'))
+    .catch(erro => res.render('error', {error: erro}))
 });
 
 // POST /cadeiras
