@@ -11,6 +11,11 @@ module.exports.lookUp = id => {
                 .exec()
 }
 
+module.exports.lookUpEmail = email =>{
+    return User.findOne({email: email})
+                .exec()
+}
+
 module.exports.insert = user => {
     return User.collection.insertOne(user)
 }
@@ -29,5 +34,5 @@ module.exports.remove = id => {
 }
 
 module.exports.getUserLevel = email => {
-    return User.findOne({email: email})
-}
+    return User.findOne({ email: email }).then(user => user.nivel);
+  };

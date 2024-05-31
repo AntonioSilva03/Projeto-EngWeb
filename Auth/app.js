@@ -1,5 +1,6 @@
 var createError = require('http-errors');
 var express = require('express');
+var session = require('express-session');
 var logger = require('morgan');
 
 var passport = require('passport');
@@ -18,7 +19,7 @@ db.once('open', function() {
 
 // config passport
 var User = require('./models/user');
-passport.use(new LocalStrategy(User.authenticate()));
+passport.use(new LocalStrategy({ usernameField: 'email' }, User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
@@ -30,7 +31,16 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+// Set up express-session middleware
+app.use(session({
+    secret: 'yourSecretKey',
+    resave: false,
+    saveUninitialized: false,
+    cookie: { secure: false } // Set to true if using HTTPS
+  }));
+
 app.use(passport.initialize());
+app.use(passport.session());
 
 app.use('/users', usersRouter);
 
