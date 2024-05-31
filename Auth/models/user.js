@@ -11,12 +11,12 @@ var userSchema = new mongoose.Schema({
     ano: Number,
     foto: String,
     filiacao: String,
-    categortia: String,
+    categoria: String,
     webpage: String,
     cursos: [String],
     cadeiras: [String]
-}, {versionKey : false});
+}, { collection: 'users' });
 
-userSchema.plugin(passportLocalMongoose);
+userSchema.plugin(passportLocalMongoose, { usernameField: 'email' });
 
-module.exports = mongoose.model('user', userSchema);
+module.exports = mongoose.model('User', userSchema);

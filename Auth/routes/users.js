@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+const mongoose = require('mongoose')
 var jwt = require('jsonwebtoken')
 var passport = require('passport')
 var userModel = require('../models/user')
@@ -23,12 +24,11 @@ router.get('/:_id', auth.verify, function (req, res) {
 
 // POST /register
 router.post('/register', function(req, res) {
-  var random = Math.floor(Math.random() * 1000000);
   const newUser = new userModel({ 
-    _id: random,
+    _id: new mongoose.Types.ObjectId(),
+    numero: Math.floor(Math.random() * 1000000).toString(),
     nome: req.body.nome, 
     email: req.body.email,
-    password: req.body.password, 
     nivel: req.body.nivel,
     ano: "",
     foto: "",
@@ -39,27 +39,16 @@ router.post('/register', function(req, res) {
     cadeiras: []
   });
 
-  userModel.register(newUser, 
-    req.body.password, 
-    function(err, user) {
-      if (err) 
-        res.jsonp({error: err, message: "Register error: " + err})
-      else{
-        passport.authenticate("local")(req,res,function(){
-          jwt.sign({ username: req.user.nome, nivel: req.user.nivel,
-            sub: 'EW'}, 
-            "EW2024",
-            {expiresIn: 36000},
-            function(e, token) {
-              if(e) {
-                res.status(500)
-                console.log('erro na geração do token')
-              } 
-              else res.status(201).jsonp({token: token})
-            });
-        })
-      }     
-    })   
+  userModel.register(newUser, req.body.password, function(err, user) {
+    if (err) {
+      console.error("Registration error:", err);
+      return res.status(409).jsonp({ error: err, message: "Register error: " + err });
+    }
+
+    else {
+      res.status(201).jsonp({ message: "User registered successfully" });
+    }
+  });
 });
 
 // POST /login
