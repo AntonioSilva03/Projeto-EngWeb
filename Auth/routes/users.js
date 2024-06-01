@@ -46,6 +46,7 @@ router.post('/register', function(req, res) {
     }
 
     else {
+      console.log("User registered successfully");
       res.status(201).jsonp({ message: "User registered successfully" });
     }
   });
@@ -103,7 +104,7 @@ router.post('/login', function(req, res, next) {
   })(req, res, next);
 });
 
-// POST /passaword
+// POST /password
 router.post('/password', function(req, res) {
   // Check if request body has email, password, and newPassword
   if (!req.body.email || !req.body.newPassword) {

@@ -25,12 +25,6 @@ module.exports.remove = id => {
                 .exec()
 }
 
-
-module.exports.getCadeiras = id => {
-    return User.findOne({_id: id})
-                .exec()
-}
-
 module.exports.getCursos = id => {
     return User.findOne({_id: id, nivel: 'docente'})
                 .exec()

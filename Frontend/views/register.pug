@@ -1,28 +1,40 @@
 extends layout
 
 block content
-  .w3-card-4
-    header.w3-bar.w3-wide.w3-card
-      h1 Registar
-      button#Action.w3-btn.w3-mb-2(type="submit" form="Register") CONFIRMAR
-      a(href="/login") Login
+  .w3-card-4.w3-container.w3-margin-top
+    header.w3-bar.w3-wide.w3-card.w3-teal
+      h1.w3-bar-item Registar
+      button#Action.w3-btn.w3-bar-item(type="submit" form="Register" style="margin-top: 12px;") CONFIRMAR
+      a#Action.w3-btn.w3-bar-item(href="/login" style="margin-top: 12px;") Login
 
-    form#Register.w3-container(action="/register" method="POST", style="padding-top:90px; padding-bottom:20px")
-        fieldset 
-            label Nome completo
-            input.w3-input(type="text" name="nome")
-            label E-mail 
-            input.w3-input(type="email" name="email")
-            label Password 
-            input.w3-input(type="password" name="password")
-            label Filiation 
-            input.w3-input(type="text" name="filiacao")
-            label Categoria
-            input.w3-input(type="text" name="categoria")
-            label Webpage
-            input.w3-input(type="text" name="webpage")
-            p Tipo de utilizador:
-            input.w3-radio(type="radio" name="nivel" value="aluno" id="aluno" checked)
-            label(for="aluno") Aluno 
-            input.w3-radio(type="radio" name="nivel" value="docente" id="docente")
-            label(for="docente") Docente 
+    form#Register.w3-container(action="/register" method="POST" style="padding-top: 30px; padding-bottom: 20px;")
+      fieldset.w3-margin-bottom
+        label.w3-text-teal Nome completo
+        input.w3-input(type="text" name="nome" style="margin-bottom: 16px;")
+
+      fieldset.w3-margin-bottom
+        label.w3-text-teal E-mail
+        input.w3-input(type="email" name="email" style="margin-bottom: 16px;")
+
+      fieldset.w3-margin-bottom
+        label.w3-text-teal Password
+        input.w3-input(type="password" name="password" style="margin-bottom: 16px;")
+
+      fieldset.w3-margin-bottom
+        label.w3-text-teal Filiation
+        input.w3-input(type="text" name="filiacao" style="margin-bottom: 16px;")
+
+      fieldset.w3-margin-bottom
+        label.w3-text-teal Categoria
+        input.w3-input(type="text" name="categoria" style="margin-bottom: 16px;")
+
+      fieldset.w3-margin-bottom
+        label.w3-text-teal Webpage
+        input.w3-input(type="text" name="webpage" style="margin-bottom: 16px;")
+
+      fieldset.w3-margin-bottom
+        p.w3-text-teal Tipo de utilizador:
+        input.w3-radio(type="radio" name="nivel" value="aluno" id="aluno" checked)
+        label(for="aluno") Aluno 
+        input.w3-radio(type="radio" name="nivel" value="docente" id="docente")
+        label(for="docente") Docente 

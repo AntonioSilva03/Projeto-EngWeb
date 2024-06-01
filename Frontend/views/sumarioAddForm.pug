@@ -1,0 +1,31 @@
+extends layout
+
+block content
+  header(class="w3-container w3-teal")
+    h1 #{title}
+
+  nav(class="w3-bar w3-light-grey")
+    a(href="/cadeiras" class="w3-bar-item w3-button") Cadeiras
+    a(href="/perfil" class="w3-bar-item w3-button") Perfil
+    a(href="/logout" class="w3-bar-item w3-button") Logout
+
+  div(class="w3-container w3-padding-24")
+    form(action=`/cadeiras/${cadeira._id}/sumario/add` method="post")
+      div(class="w3-card-4 w3-margin-bottom")
+        div(class="w3-container w3-teal")
+          h2(class="w3-center") Novo Sumário
+
+        div(class="w3-container w3-padding")
+          div(class="w3-row-padding")
+            div(class="w3-half")
+              label(for="aula") Aula (T ou P)
+              input(type="text" name="aula" class="w3-input w3-border" required)
+
+            div(class="w3-half")
+              label(for="data") Data
+              input(type="text" name="data" class="w3-input w3-border" required)
+
+          label(for="conteudo") Conteúdo (separado por vírgulas)
+          input(type="text" name="conteudo" class="w3-input w3-border" required)
+
+          button(type="submit" class="w3-button w3-teal w3-margin-top") Adicionar

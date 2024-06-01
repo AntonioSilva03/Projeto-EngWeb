@@ -1,44 +1,39 @@
 extends layout
 
 block content
-  header(class="w3-container w3-teal")
-    h1 #{title}
+  header(class="w3-container w3-teal w3-padding-16")
+    h1 #{title} de #{user.nome}
 
-  nav(class="w3-bar w3-light-grey")
+  nav(class="w3-bar w3-light-grey w3-padding-8")
     a(href="/cadeiras" class="w3-bar-item w3-button") Cadeiras
     a(href="/perfil" class="w3-bar-item w3-button") Perfil
     a(href="/perfil/update" class="w3-bar-item w3-button") Editar
     a(href="/logout" class="w3-bar-item w3-button") Logout
 
-  div(class="w3-container")
-    p Nome: #{user.nome}
+  div(class="w3-container w3-margin-top")
+    ul(class="w3-ul w3-card-4 w3-padding")
+      li(class="w3-bar w3-padding-16")
+        if user.nivel == 'aluno' 
+          h2 Perfil de Aluno
+        if user.nivel == 'docente'
+          h2 Perfil de Docente  
+        if user.nivel == 'admin'
+          h2 Perfil de Admin
+        
+        p Nome: #{user.nome}
+        p Email: #{user.email}
+        p Numero: #{user.numero}
+        p Filiação Académica: #{user.filiacao}
+        p Categoria: #{user.categoria}
+        p Webpage: 
+          a(href=user.webpage target="_blank" class="w3-text-teal") #{user.webpage}
 
-    p Email: #{user.email}
-
-    p Numero: #{user.numero}
-
-    p Filiação Académica: #{user.filiacao}
-
-    p Categoria: #{user.categoria}
-
-    p Webpage: #{user.webpage}
-
-    if user.nivel == 'aluno' 
-      p Curso: #{user.cursos[0]}
-
-    if user.nivel == 'docente'
-      ul(class="w3-ul w3-card-4")
-        for curso in user.cursos
-          li(class="w3-bar")
-            span(class="w3-bar-item")
-            a(href=`/cursos/${curso}`) #{curso}
-
-    p Cadeiras:
-    if user.cadeiras.lemght > 0
-      ul(class="w3-ul w3-card-4")
-        for cadeira in user.cadeiras
-          li(class="w3-bar")
-            span(class="w3-bar-item")
-            a(href=`/cadeiras/${cadeira}`) #{cadeira.nome}
-    else
-      p Sem cadeiras
+      li(class="w3-bar w3-padding-16")
+        h2 Cadeiras:
+        if cadeiras.length > 0
+          ul(class="w3-ul w3-card-4")
+            for cadeira in cadeiras
+              li(class="w3-bar w3-padding-8")
+                a(href=`/cadeiras/${cadeira._id}` class="w3-bar-item w3-text-teal w3-hover-text-black") #{cadeira.titulo}
+        else
+          p Sem cadeiras

@@ -1,0 +1,89 @@
+extends layout
+
+block content
+  header(class="w3-container w3-teal")
+    h1 #{title}
+
+  nav(class="w3-bar w3-light-grey")
+    a(href="/cadeiras" class="w3-bar-item w3-button") Cadeiras
+    
+    a(href="/perfil" class="w3-bar-item w3-button") Perfil
+
+    if nivel == 'docente' || nivel == 'admin'
+      a(href="/cadeiras/add" class="w3-bar-item w3-button") Nova Cadeira 
+      
+    if ( (nivel == 'docente' || nivel == 'admin') && cadeira.docentes[0] == userID )
+      a(href=`/cadeiras/${cadeira._id}/update` class="w3-bar-item w3-button") Editar Cadeira
+
+    if nivel == 'docente'
+      a(href=`/cadeiras/${cadeira._id}/sumario/add` class="w3-bar-item w3-button") Novo Sumário
+
+    if nivel == 'admin' || nivel == 'docente'
+      a(href=`/cadeiras/${cadeira._id}/alunos` class="w3-bar-item w3-button") Alunos
+
+    if nivel == 'admin' || nivel == 'docente'
+      a(href=`/cadeiras/${cadeira._id}/ficheiros` class="w3-bar-item w3-button") Ficheiros
+
+    if nivel == 'admin' || nivel == 'docente'
+      a(href=`/cadeiras/${cadeira._id}/ficheiros/upload` class="w3-bar-item w3-button") Upload de Ficheiros
+      
+    a(href="/logout" class="w3-bar-item w3-button") Logout
+
+  div(class="w3-container")
+    h3 Horário teóricas
+    ul(class="w3-ul w3-card-4")
+      for horario in cadeira.horario.teoricas
+        li(class="w3-bar")
+          span(class="w3-bar-item") #{horario}
+
+    h3 Horário práticas
+    ul(class="w3-ul w3-card-4")
+      for horario in cadeira.horario.praticas
+        li(class="w3-bar")
+          span(class="w3-bar-item") #{horario}
+
+    h3 Avaliação 
+    ul(class="w3-ul w3-card-4")
+      for avaliacao in cadeira.avaliacao
+        li(class="w3-bar")
+          span(class="w3-bar-item") #{avaliacao}
+
+    h3 Datas
+    ul(class="w3-ul w3-card-4")
+        li(class="w3-bar")
+          span(class="w3-bar-item") Teste: #{cadeira.datas.teste} 
+        
+        li(class="w3-bar")
+          span(class="w3-bar-item") Exame: #{cadeira.datas.exame}
+
+        li(class="w3-bar")
+          span(class="w3-bar-item") Projeto: #{cadeira.datas.projeto}
+
+    h3 Docentes
+    ul(class="w3-ul w3-card-4")
+      for docente in docentes
+        li(class="w3-bar")
+          span(class="w3-bar-item")
+          a(href=`/users/${docente._id}`) #{docente.nome}
+
+    h3 Sumários
+    ul(class="w3-ul w3-card-4")
+      if cadeira.aulas.length === 0
+        li(class="w3-bar")
+          span(class="w3-bar-item") Não existem sumários
+      else
+        each sumario in cadeira.aulas
+          div(class="w3-card-4" style="margin-bottom: 10px")
+            li(class="w3-bar")
+              ul(class="w3-ul")
+                li(class="w3-bar")
+                  if sumario.tipo === 'T'
+                    span(class="w3-bar-item") Aula: Teórica
+                  else
+                    span(class="w3-bar-item") Aula: Prática
+                li(class="w3-bar")
+                  span(class="w3-bar-item") Data: #{sumario.data}
+                if sumario.sumario
+                  each sum, index in sumario.sumario
+                    li(class="w3-bar" style=`margin-bottom: ${index === sumario.sumario.length - 1 ? '0' : '10px'}`)
+                      span(class="w3-bar-item") #{sum}

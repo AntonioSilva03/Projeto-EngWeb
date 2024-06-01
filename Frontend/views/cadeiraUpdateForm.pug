@@ -1,0 +1,56 @@
+extends layout
+
+block content
+  header(class="w3-container w3-teal")
+    h1 Editar Cadeira
+
+  nav(class="w3-bar w3-light-grey")
+    a(href="/cadeiras" class="w3-bar-item w3-button") Cadeiras
+    
+    a(href="/perfil" class="w3-bar-item w3-button") Perfil
+
+    if nivel == 'docente' || nivel == 'admin'
+      a(href="/cadeiras/add" class="w3-bar-item w3-button") Nova Cadeira 
+      
+    if ( (nivel == 'docente' || nivel == 'admin') && cadeira.docentes[0] == userID )
+      a(href=`/cadeiras/${cadeira._id}/update` class="w3-bar-item w3-button") Editar Cadeira
+
+    if nivel == 'docente'
+      a(href=`/cadeiras/${cadeira._id}/sumario/add` class="w3-bar-item w3-button") Novo Sumário
+
+    if nivel == 'admin' || nivel == 'docente'
+      a(href=`/cadeiras/${cadeira._id}/alunos` class="w3-bar-item w3-button") Alunos
+
+    if nivel == 'admin' || nivel == 'docente'
+      a(href=`/cadeiras/${cadeira._id}/ficheiros` class="w3-bar-item w3-button") Ficheiros
+
+    if nivel == 'admin' || nivel == 'docente'
+      a(href=`/cadeiras/${cadeira._id}/ficheiros/upload` class="w3-bar-item w3-button") Upload de Ficheiros
+      
+    a(href="/logout" class="w3-bar-item w3-button") Logout
+
+  div(class="w3-container")
+    h2 #{title}
+    form(action=`/cadeiras/${cadeira._id}/update` method="post" class="w3-container w3-card-4")
+      label(class="w3-text-teal") Docentes (IDs, separados por vírgula)
+      input(type="text" name="docentes" class="w3-input w3-border" value=`${docentes}`)
+
+      label(class="w3-text-teal") Horário (Teóricas, separados por vírgula)
+      input(type="text" name="horario_teoricas" class="w3-input w3-border" value=`${horarioT}`)
+
+      label(class="w3-text-teal") Horário (Práticas, separados por vírgula)
+      input(type="text" name="horario_praticas" class="w3-input w3-border" value=`${horarioP}`)
+
+      label(class="w3-text-teal") Avaliação (Separados por vírgula)
+      input(type="text" name="avaliacao" class="w3-input w3-border" value=`${avaliacao}`)
+
+      label(class="w3-text-teal") Data do Teste
+      input(type="text" name="datas_teste" class="w3-input w3-border" value=`${cadeira.datas.teste}`)
+
+      label(class="w3-text-teal") Data do Exame
+      input(type="text" name="datas_exame" class="w3-input w3-border" value=`${cadeira.datas.exame}`)
+
+      label(class="w3-text-teal") Data do Projeto
+      input(type="text" name="datas_projeto" class="w3-input w3-border" value=`${cadeira.datas.projeto}`)
+
+      button(type="submit" class="w3-button w3-teal w3-margin-top") Confirmar Alterações
