@@ -169,3 +169,9 @@ module.exports.deleteCadeira = (_id, token) => {
         .then(dados => { return dados })
         .catch(erro => { throw erro })
 }
+
+module.exports.listDocentes = (token) => {
+    return axios.get(`http://localhost:7776/users/docentes?token=${token}`)
+        .then(dados => { return dados })
+        .catch(erro => { throw erro })
+}

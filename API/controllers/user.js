@@ -4,6 +4,10 @@ module.exports.list = () => {
     return User.find().sort({nome: 1}).exec()
 }
 
+module.exports.listDocentes = () => {
+    return User.find({nivel: 'docente'}).exec()
+}
+
 module.exports.lookUp = id => {
     return User.findOne({_id: id}).exec()
 }

@@ -61,7 +61,11 @@ router.get('/cadeiras', Auth.auth, function(req, res, next) {
 // GET /cadeiras/add (docentes/admin)
 router.get('/cadeiras/add', Auth.auth, function(req, res, next) {
   if (req.nivel === 'admin' || req.nivel === 'docente') {
-    res.render('cadeiraAddForm', {title: 'Adicionar Cadeira', nivel: req.nivel, userID: req.idUser})
+    API.listDocentes(req.cookies.token)
+      .then(dados => {
+        res.render('cadeiraAddForm', {title: 'Adicionar Cadeira', docentes: dados.data, nivel: req.nivel, userID: req.idUser})
+      })
+      .catch(erro => res.render('error', {error: erro}))
   }
 });
 
@@ -202,7 +206,7 @@ router.post('/login', function(req, res, next) {
     
     })
     .catch(erro => {
-      res.render('error', {error: erro})
+      res.render('login', {message: 'Credenciais inválidas'})
     })
 });
 

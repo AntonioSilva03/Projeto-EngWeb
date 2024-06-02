@@ -7,7 +7,6 @@ var mongoose = require('mongoose');
 var Uc = require('../controllers/uc');
 var User = require('../controllers/user');
 var Ficheiro = require('../controllers/ficheiro');
-const { TriggerOpTypes } = require('vue');
 
 function auth(req, res, next) {
     let token = req.body.token || req.query.token
@@ -95,6 +94,17 @@ router.get('/users', auth, function(req, res) {
     }
 });
 
+// GET /users/docentes
+router.get('/users/docentes', auth, function(req, res) {
+    if (req.user) {
+        User.listDocentes()
+            .then(data => {
+                res.status(200).jsonp(data)
+            })
+            .catch(error => res.status(500).jsonp(error))
+    }
+});
+
 // GET /users/:_id
 router.get('/users/:_id', auth, function(req, res) {
     if (req.user) {
@@ -152,12 +162,14 @@ router.post('/cadeiras', auth, function(req, res) {
         res.status(401).jsonp({error: 'User not authorized'})
         return
     }
+    console.log(req.body)
+    console.log(req.body.docentes)
     const uc = {
         _id: new mongoose.Types.ObjectId(),
         numero: req.body.numero,
         titulo: req.body.titulo,
         sigla: req.body.sigla,
-        docentes: req.body.docentes.split(','),
+        docentes: req.body.docentes,
         horario: {
             teoricas: req.body.horario_teoricas.split(','),
             praticas: req.body.horario_praticas.split(',')
