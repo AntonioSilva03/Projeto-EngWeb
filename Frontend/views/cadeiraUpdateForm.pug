@@ -32,8 +32,10 @@ block content
   div(class="w3-container")
     h2 #{title}
     form(action=`/cadeiras/${cadeira._id}/update` method="post" class="w3-container w3-card-4")
-      label(class="w3-text-teal") Docentes (IDs, separados por vírgula)
-      input(type="text" name="docentes" class="w3-input w3-border" value=`${docentes}`)
+      label(class="w3-text-teal") Docentes (Segurar ctrl e clicar nos docentes que deseja adicionar à cadeira)
+      select.w3-select.w3-border(name="docentes", multiple, required)
+        each docente in docentes
+          option(value=docente._id)= docente.nome
 
       label(class="w3-text-teal") Horário (Teóricas, separados por vírgula)
       input(type="text" name="horario_teoricas" class="w3-input w3-border" value=`${horarioT}`)

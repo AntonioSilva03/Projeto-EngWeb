@@ -74,11 +74,14 @@ router.get('/cadeiras/:_id/update', Auth.auth, function(req, res, next) {
   if (req.nivel === 'admin' || req.nivel === 'docente') {
     API.getCadeira(req.params._id, req.cookies.token)
     .then(({ cadeiraData, docentesData }) => {
-          const docentes = cadeiraData.docentes.join(', ')
           const horarioT = cadeiraData.horario.teoricas.join(', ')
           const horarioP = cadeiraData.horario.praticas.join(', ')
           const avaliacao = cadeiraData.avaliacao.join(', ')
-          res.render('cadeiraUpdateForm', { title: cadeiraData.titulo, cadeira: cadeiraData, docentes: docentes, horarioT: horarioT, horarioP: horarioP, avaliacao, avaliacao, nivel: req.nivel, userID: req.idUser });
+          API.listDocentes(req.cookies.token)
+            .then(docentesData => {
+              res.render('cadeiraUpdateForm', { title: cadeiraData.titulo, cadeira: cadeiraData, docentes: docentesData.data, horarioT: horarioT, horarioP: horarioP, avaliacao, avaliacao, nivel: req.nivel, userID: req.idUser });
+            })
+            .catch(erro => res.render('error', { error: erro }));
       })
       .catch(erro => res.render('error', {error: erro}))
   }
@@ -283,7 +286,6 @@ router.post('/cadeiras/:_id/sumario/add', Auth.auth, function(req, res, next) {
 
 // POST /cadeiras/:_id/update
 router.post('/cadeiras/:_id/update', Auth.auth, function(req, res, next) {
-  req.body.docentes = req.body.docentes.split(',')
   req.body.horario_teoricas = req.body.horario_teoricas.split(',')
   req.body.horario_praticas = req.body.horario_praticas.split(',')
   req.body.avaliacao = req.body.avaliacao.split(',')
