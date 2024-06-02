@@ -47,8 +47,20 @@ router.get('/cadeiras/:_id', auth, function(req, res) {
 router.get('/cadeiras/:_id/alunos', auth, function(req, res) {
     if (req.user) {
         Uc.listInscritos(req.params._id)
-            .then(data => res.jsonp(data.inscritos))
-            .catch(error => res.status(500).jsonp(error))
+            .then(response => {
+                const alunoPromises = response.inscritos.map(inscritoId => 
+                    User.lookUp(inscritoId)
+                );
+
+                Promise.all(alunoPromises)
+                    .then(alunos => {
+                        res.jsonp(alunos);
+                    })
+                    .catch(error => res.status(500).jsonp(error));
+            })
+            .catch(error => res.status(500).jsonp(error));
+    } else {
+        res.status(401).jsonp({ message: 'Unauthorized' });
     }
 });
 
@@ -56,15 +68,6 @@ router.get('/cadeiras/:_id/alunos', auth, function(req, res) {
 router.get('/cadeiras/:_id/ficheiros', auth, function(req, res) {
     if (req.user) {
         Ficheiro.listCadeira(req.params._id)
-            .then(data => res.jsonp(data))
-            .catch(error => res.status(500).jsonp(error))
-    }
-});
-
-// GET /cadeiras/:_id/ficheiros/:_idFicheiro
-router.get('/cadeiras/:_id/ficheiros/:_idFicheiro', auth, function(req, res) {
-    if (req.user) {
-        Ficheiro.lookUp(req.params._idFicheiro)
             .then(data => res.jsonp(data))
             .catch(error => res.status(500).jsonp(error))
     }
@@ -108,6 +111,21 @@ router.get('/users/:_id/cadeiras', auth, function(req, res) {
             let cadeiras = []
             data.forEach(uc => {
                 if (uc.docentes.includes(req.params._id)) {
+                    cadeiras.push(uc)
+                }
+            })
+            res.jsonp(cadeiras)
+        })
+        .catch(error => res.status(500).jsonp(error))
+});
+
+// GET /users/:_id/cadeiras/adicionar
+router.get('/users/:_id/cadeiras/adicionar', auth, function(req, res) {
+    Uc.listCadeirasSemAluno()
+        .then(data => {
+            let cadeiras = []
+            data.forEach(uc => {
+                if (!uc.inscritos.includes(req.params._id)) {
                     cadeiras.push(uc)
                 }
             })
@@ -201,7 +219,42 @@ router.post('/cadeiras/:_id/sumarios', auth, function(req, res) {
         .catch(error => res.status(500).jsonp(error))
 });
 
-// POST /cadeiras/:_id/ficheiros (docentes ou admin)
+// POST /cadeiras/:_id/ficheiros
+router.post('/cadeiras/:_id/ficheiros', auth, function(req, res) {
+    if (req.user.level != 'docente' && req.user.level != 'admin') {
+        res.status(401).jsonp({error: 'User not authorized'})
+        return
+    }
+    
+    const ficheiro = {
+        _id: new mongoose.Types.ObjectId(),
+        nome: req.body.nome,
+        descricao: req.body.descricao,
+        path: req.body.path,
+        mimetype: req.body.mimetype,
+        data: req.body.data,
+        cadeira: req.params._id
+    }
+
+    Ficheiro.insert(ficheiro)
+        .then(data => res.jsonp(data))
+        .catch(error => res.status(500).jsonp(error))
+});
+
+// POST /users/:_id/cadeiras/adicionar
+router.post('/users/:_id/cadeiras/adicionar', auth, function(req, res) {
+    if (req.user.level != 'aluno') {
+        res.status(401).jsonp({error: 'User not authorized'})
+        return
+    }
+    User.addCadeira(req.params._id, req.body.cadeira)
+        .then(data => {
+            Uc.addInscrito(req.body.cadeira, req.params._id)
+                .then(data => res.jsonp(data))
+                .catch(error => res.status(500).jsonp(error))
+        })
+        .catch(error => res.status(500).jsonp(error))
+});
 
 // DELETE /cadeiras/:_id (docentes ou admin)
 router.delete('/cadeiras/:_id', auth, function(req, res) {
@@ -223,6 +276,48 @@ router.put('/users/:_id', auth, function(req, res) {
     }
 });
 
-// DELETE /cadeiras/:_id/ficheiros/:_idFicheiro (docentes ou admin)
+// PUT /cadeiras/:_id/alunos/:_idAluno/remove
+router.put('/cadeiras/:_id/alunos/:_idAluno/remove', auth, function(req, res) {
+    if (req.user.level != 'docente' && req.user.level != 'admin') {
+        res.status(401).jsonp({error: 'User not authorized'})
+        return
+    }
+    Uc.removeInscrito(req.params._id, req.params._idAluno)
+        .then(data => {
+            User.removeCadeira(req.params._idAluno, req.params._id)
+                .then(data => res.jsonp(data))
+                .catch(error => res.status(500).jsonp(error))
+        })
+        .catch(error => res.status(500).jsonp(error))
+});
+
+// DELETE /cadeiras/:_id/delete
+router.delete('/cadeiras/:_id/delete', auth, function(req, res) {
+    if (req.user.level != 'docente' && req.user.level != 'admin') {
+        res.status(401).jsonp({error: 'User not authorized'})
+        return
+    }
+    
+    Uc.lookUp(req.params._id)
+        .then(uc => {
+            if (uc.docentes[0] === req.user._id) {
+                Uc.remove(req.params._id)
+                    .then(data => res.jsonp(data))
+                    .catch(error => res.status(500).jsonp(error))
+            }
+        })
+        .catch(error => res.status(500).jsonp('Error: Cadeira not found'))
+});
+
+// DELETE /cadeiras/:_id/ficheiros/:_idFicheiro
+router.delete('/cadeiras/:_id/ficheiros/:_idFicheiro', auth, function(req, res) {
+    if (req.user.level != 'docente' && req.user.level != 'admin') {
+        res.status(401).jsonp({error: 'User not authorized'})
+        return
+    }
+    Ficheiro.remove(req.params._idFicheiro)
+        .then(data => res.jsonp(data))
+        .catch(error => res.status(500).jsonp(error))
+});
 
 module.exports = router;

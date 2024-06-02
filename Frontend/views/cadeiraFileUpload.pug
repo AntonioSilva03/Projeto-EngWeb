@@ -1,0 +1,41 @@
+extends layout
+
+block content
+  header(class="w3-container w3-teal")
+    h1 #{title}
+
+  nav(class="w3-bar w3-light-grey")
+        a(href="/cadeiras" class="w3-bar-item w3-button") Cadeiras
+        
+        a(href="/perfil" class="w3-bar-item w3-button") Perfil
+
+        if nivel == 'docente' || nivel == 'admin'
+        a(href="/cadeiras/add" class="w3-bar-item w3-button") Nova Cadeira 
+        
+        if ( (nivel == 'docente' || nivel == 'admin') && cadeira.docentes[0] == userID )
+        a(href=`/cadeiras/${cadeira._id}/update` class="w3-bar-item w3-button") Editar Cadeira
+
+        if nivel == 'docente'
+        a(href=`/cadeiras/${cadeira._id}/sumario/add` class="w3-bar-item w3-button") Novo Sumário
+
+        if (nivel == 'admin' || nivel == 'docente')
+        a(href=`/cadeiras/${cadeira._id}/alunos` class="w3-bar-item w3-button") Alunos 
+
+        a(href=`/cadeiras/${cadeira._id}/ficheiros` class="w3-bar-item w3-button") Ficheiros
+
+        if (nivel == 'admin' || nivel == 'docente') && cadeira.docentes[0] == userID
+        a(href=`/cadeiras/${cadeira._id}/ficheiros/upload` class="w3-bar-item w3-button") Upload de Ficheiros
+        
+        a(href="/logout" class="w3-bar-item w3-button") Logout
+
+  div(class="w3-conatiner")
+        h2 Ficheiro
+        form(action=`/cadeiras/${cadeira._id}/ficheiros/upload` method="POST" enctype="multipart/form-data" class="w3-container w3-card-4")
+          p
+            input(type="file" name="ficheiro" class="w3-input w3-border")
+
+          p 
+            input(type="text" name="descricao" placeholder="Descrição" class="w3-input w3-border")
+
+          p
+            button(type="submit" class="w3-button w3-teal") Upload

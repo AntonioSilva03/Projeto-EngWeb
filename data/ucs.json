@@ -3,7 +3,7 @@
         "sigla": "RPCW2024",
         "titulo": "Representação e Processamento de Conhecimento na Web",
         "docentes": [
-            "394"
+            "665ccad40386a85fbc15bf47"
         ],
         "horario": {
             "teoricas": [
@@ -160,15 +160,15 @@
                 ]
             }
         ],
-        "numero": "711",
+        "numero": "546",
         "inscritos": []
     },
     {
         "sigla": "ENGWEB2024",
         "titulo": "Engenharia Web",
         "docentes": [
-            "394",
-            "817"
+            "665ccad40386a85fbc15bf47",
+            "665ccad40386a85fbc15bf49"
         ],
         "horario": {
             "teoricas": [
@@ -325,15 +325,15 @@
                 ]
             }
         ],
-        "numero": "10",
+        "numero": "837",
         "inscritos": []
     },
     {
         "sigla": "ATP2023",
         "titulo": "Algoritmos e Técnicas de Programação",
         "docentes": [
-            "817",
-            "59"
+            "665ccad40386a85fbc15bf47",
+            "665ccad40386a85fbc15bf4b"
         ],
         "horario": {
             "teoricas": [
@@ -599,7 +599,7 @@
                 ]
             }
         ],
-        "numero": "264",
+        "numero": "635",
         "inscritos": []
     }
 ]

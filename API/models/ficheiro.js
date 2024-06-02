@@ -8,7 +8,6 @@ var ficheiroSchema = new mongoose.Schema({
     mimetype: String,
     data: String,
     cadeira: String, // _id da cadeira
-    autor: String // _id do docente
 }, {versionKey : false});
 
 module.exports = mongoose.model('ficheiro', ficheiroSchema);

@@ -1,5 +1,6 @@
 import json
 import random
+import bson
 
 json_files = ['dataset_exemplo1.json', 'dataset_exemplo2.json', 'dataset_exemplo3.json']
 
@@ -13,21 +14,22 @@ for file in json_files:
     with open(file, 'r', encoding='utf-8') as f:
         data = json.load(f)
 
-        _id = str(random.randint(0, 1000))
-        if _id not in ids_usados:
-            ids_usados.append(_id)
-            data['numero'] = _id
+        object_id_cadeira = str(bson.ObjectId())
+
+        numero_cadeira = str(random.randint(0, 1000))
+        if numero_cadeira not in ids_usados:
+            ids_usados.append(numero_cadeira)
+            data['numero'] = numero_cadeira
 
         docentes_uc = []
 
         for docente in data['docentes']:
             if docente['nome'] not in [docente['nome'] for docente in lista_docentes]:
-                docente['password'] = "1234"
-                id_docente = str(random.randint(0, 1000))
+                numero_docente = str(random.randint(0, 1000))
 
-                if id_docente not in ids_usados:
-                    ids_usados.append(id_docente)
-                    docente['numero'] = id_docente
+                if numero_docente not in ids_usados:
+                    ids_usados.append(numero_docente)
+                    docente['numero'] = numero_docente
 
                 docente['nivel'] = 'docente'
 
@@ -35,16 +37,22 @@ for file in json_files:
 
                 docente['cursos'] = ['Licenciatura em Engenharia Informática']
 
-                lista_docentes.append(docente)
+                docente['password'] = '1234'
 
-            docentes_uc.append(id_docente)
+                object_id = str(bson.ObjectId())
+
+                docente['_id'] = object_id
+
+                lista_docentes.append(docente)
 
             lista_docentes_index = [docente['nome'] for docente in lista_docentes].index(docente['nome'])
 
+            docentes_uc.append(lista_docentes[lista_docentes_index]['_id'])
+
             if 'cadeiras' not in lista_docentes[lista_docentes_index]:
-                docente['cadeiras'] = [_id]
+                lista_docentes[lista_docentes_index]['cadeiras'] = [object_id_cadeira]
             else:
-                lista_docentes[lista_docentes_index]['cadeiras'].append(_id)
+                lista_docentes[lista_docentes_index]['cadeiras'].append(object_id_cadeira)
 
         data['docentes'] = docentes_uc
 

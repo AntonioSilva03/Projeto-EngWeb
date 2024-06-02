@@ -8,25 +8,11 @@ var auth = require('../auth/auth') // isAdmin, verify
 
 var User = require('../controllers/user')
 
-// GET /
-router.get('/', auth.isAdmin, function (req, res) {
-  User.list()
-    .then(dados => res.status(200).jsonp({dados: dados}))
-    .catch(erro => res.status(500).jsonp({error: erro}))
-});
-
-// GET /:_id
-router.get('/:_id', auth.verify, function (req, res) {
-  User.lookUp(req.params._id)
-    .then(dados => res.status(200).jsonp({dados: dados}))
-    .catch(erro => res.status(500).jsonp({error: erro}))
-});
-
 // POST /register
 router.post('/register', function(req, res) {
   const newUser = new userModel({ 
-    _id: new mongoose.Types.ObjectId(),
-    numero: Math.floor(Math.random() * 1000000).toString(),
+    _id: req.body._id || new mongoose.Types.ObjectId(),
+    numero: req.body.numero || Math.floor(Math.random() * 1000000).toString(),
     nome: req.body.nome, 
     email: req.body.email,
     nivel: req.body.nivel,
@@ -36,7 +22,7 @@ router.post('/register', function(req, res) {
     categoria: req.body.categoria,
     webpage: req.body.webpage,
     cursos: [],
-    cadeiras: []
+    cadeiras: req.body.cadeiras || []
   });
 
   userModel.register(newUser, req.body.password, function(err, user) {
@@ -94,6 +80,8 @@ router.post('/login', function(req, res, next) {
             console.error("Error generating token:", err);
             return res.status(500).jsonp({ error: "Erro na geração do token: " + err });
           }
+          console.log("User logged in successfully");
+          console.log(foundUser);
           res.status(201).jsonp({ token: token });
         });
       } catch (err) {

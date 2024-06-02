@@ -26,15 +26,18 @@ nome, email, filiação (estudante, docente, curso, departamento, ...), nível (
 
 ## Setup mongo
 
+```bash
+python read_datasets.py
+
+python launch_container.py ucWebsites ucs ./ucs.json 
+
+python register_users.py # necessário ter tudo a correr
 ```
-python launch_container.py ucWebsites users ./users.json ucs ./ucs.json ficheiros ./ficheiros.json
-docker exec -it data-mongodb-1 mongosh
-use ucWebsites
-db.createCollection("ficheiros")
-```
+
+**Nota:** a password das contas importadas é "1234"
 
 ## Portas
 
-- API -> 7779
 - Auth -> 7778
 - Frontend -> 7777
+- API -> 7776

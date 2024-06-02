@@ -18,14 +18,16 @@ block content
     if nivel == 'docente'
       a(href=`/cadeiras/${cadeira._id}/sumario/add` class="w3-bar-item w3-button") Novo Sumário
 
-    if nivel == 'admin' || nivel == 'docente'
-      a(href=`/cadeiras/${cadeira._id}/alunos` class="w3-bar-item w3-button") Alunos
+    if (nivel == 'admin' || nivel == 'docente')
+      a(href=`/cadeiras/${cadeira._id}/alunos` class="w3-bar-item w3-button") Alunos 
 
-    if nivel == 'admin' || nivel == 'docente'
-      a(href=`/cadeiras/${cadeira._id}/ficheiros` class="w3-bar-item w3-button") Ficheiros
+    a(href=`/cadeiras/${cadeira._id}/ficheiros` class="w3-bar-item w3-button") Ficheiros
 
-    if nivel == 'admin' || nivel == 'docente'
+    if (nivel == 'admin' || nivel == 'docente') && cadeira.docentes[0] == userID
       a(href=`/cadeiras/${cadeira._id}/ficheiros/upload` class="w3-bar-item w3-button") Upload de Ficheiros
+
+    if nivel == 'aluno'
+      a(href=`/users/${userID}/cadeiras/adicionar` class="w3-bar-item w3-button") Adicionar Cadeira
       
     a(href="/logout" class="w3-bar-item w3-button") Logout
 

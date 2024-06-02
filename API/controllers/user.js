@@ -1,14 +1,11 @@
 var User = require('../models/user')
 
 module.exports.list = () => {
-    return User.find()
-                .sort({nome: 1})  
-                .exec()
+    return User.find().sort({nome: 1}).exec()
 }
 
 module.exports.lookUp = id => {
-    return User.findOne({_id: id})
-                .exec()
+    return User.findOne({_id: id}).exec()
 }
 
 module.exports.insert = user => {
@@ -16,21 +13,17 @@ module.exports.insert = user => {
 }
 
 module.exports.update = (id, user) => {
-    return User.findByIdAndUpdate(id, user)
-                .exec()
+    return User.findByIdAndUpdate(id, user).exec()
 }
 
 module.exports.remove = id => {
-    return User.findByIdAndRemove(id)
-                .exec()
+    return User.findByIdAndRemove(id).exec()
 }
 
-module.exports.getCursos = id => {
-    return User.findOne({_id: id, nivel: 'docente'})
-                .exec()
+module.exports.addCadeira = (id, idCadeira) => {
+    return User.updateOne({_id: id}, {$addToSet: {cadeiras: idCadeira}})
 }
 
-module.exports.getCursoEstudante = id => {
-    return User.findOne({_id: id, nivel: 'estudante'})
-                .exec()
+module.exports.removeCadeira = (id, idCadeira) => {
+    return User.updateOne({_id: id}, {$pull: {cadeiras: idCadeira}})
 }

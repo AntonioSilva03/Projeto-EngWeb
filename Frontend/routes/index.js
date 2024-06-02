@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var path = require('path'); 
 var jsonfile = require('jsonfile');
 var fs = require('fs');
 var multer = require('multer');
@@ -36,7 +37,7 @@ router.get('/perfil', Auth.auth, function(req, res, next) {
 
   Promise.all([userData, userCadeiras])
     .then(([userData, userCadeiras]) => {
-      res.render('perfilPage', { title: 'Perfil', user: userData.data, cadeiras: userCadeiras, nivel: req.nivel });
+      res.render('perfilPage', { title: 'Perfil', user: userData.data, cadeiras: userCadeiras, nivel: req.nivel, userID: req.idUser});
     })
     .catch(erro => res.render('error', { error: erro }));
 });
@@ -44,7 +45,7 @@ router.get('/perfil', Auth.auth, function(req, res, next) {
 // GET /perfil/update
 router.get('/perfil/update', Auth.auth, function(req, res, next) {
   API.getUserData(req.idUser, req.cookies.token)
-    .then(dados => res.render('perfilUpdateForm', {title: 'Editar perfil', user: dados.data}))
+    .then(dados => res.render('perfilUpdateForm', {title: 'Editar perfil', user: dados.data, nivel: req.nivel, userID: req.idUser}))
     .catch(erro => res.render('error', {error: erro}))
 });
 
@@ -52,7 +53,7 @@ router.get('/perfil/update', Auth.auth, function(req, res, next) {
 router.get('/cadeiras', Auth.auth, function(req, res, next) {
   API.getCadeirasUser(req.idUser, req.nivel, req.cookies.token)
     .then(dados => {
-      res.render('cadeirasList', {title: 'Cadeiras', cadeiras: dados, nivel: req.nivel})
+      res.render('cadeirasList', {title: 'Cadeiras', cadeiras: dados, nivel: req.nivel, userID: req.idUser})
     })
     .catch(erro => res.render('error', {error: erro}))
 });
@@ -60,7 +61,7 @@ router.get('/cadeiras', Auth.auth, function(req, res, next) {
 // GET /cadeiras/add (docentes/admin)
 router.get('/cadeiras/add', Auth.auth, function(req, res, next) {
   if (req.nivel === 'admin' || req.nivel === 'docente') {
-    res.render('cadeiraAddForm', {title: 'Adicionar Cadeira', nivel: req.nivel})
+    res.render('cadeiraAddForm', {title: 'Adicionar Cadeira', nivel: req.nivel, userID: req.idUser})
   }
 });
 
@@ -88,12 +89,57 @@ router.get('/cadeiras/:_id', Auth.auth, function(req, res, next) {
       .catch(erro => res.render('error', { error: erro }));
 });
 
+// GET /cadeiras/:_id/ficheiros
+router.get('/cadeiras/:_id/ficheiros', Auth.auth, function(req, res, next) {
+  if (req.idUser) {
+    API.getCadeira(req.params._id, req.cookies.token)
+      .then(({ cadeiraData, docentesData }) => {
+        API.ficheirosCadeira(req.params._id, req.cookies.token)
+          .then(ficheirosData =>
+            res.render('cadeiraFicheiros', { title: 'Ficheiros', cadeira: cadeiraData, ficheiros: ficheirosData.data, nivel: req.nivel, userID: req.idUser })
+          )
+          .catch(erro => res.render('error', { error: erro }));
+      })
+      .catch(erro => res.render('error', { error: erro }));
+  }
+});
+
+// GET /cadeiras/:_id/ficheiros/upload
+router.get('/cadeiras/:_id/ficheiros/upload', Auth.auth, function(req, res, next) {
+  API.getCadeira(req.params._id, req.cookies.token)
+    .then(({ cadeiraData, docentesData }) => {
+      res.render('cadeiraFileUpload', { title: 'Upload Ficheiro', cadeira: cadeiraData, nivel: req.nivel, userID: req.idUser })
+    })
+    .catch(erro => res.render('error', {error: erro}))
+});
+
+// GET /cadeiras/:_id/ficheiros/:_idFicheiro/download
+router.get('/cadeiras/:_id/ficheiros/:_idFicheiro/download', Auth.auth, function(req, res, next) {
+  API.getFile(req.params._id, req.params._idFicheiro, req.cookies.token)
+    .then(dados => {
+      const file = dados.data;
+      const filePath = path.join(__dirname, '/../public/fileStore/', file.nome);
+      
+      res.download(filePath, file.nome);
+    })
+    .catch(erro => res.render('error', { error: erro }));
+});
+
+// GET /cadeiras/:_id/ficheiros/:_idFicheiro/delete
+router.get('/cadeiras/:_id/ficheiros/:_idFicheiro/delete', Auth.auth, function(req, res, next) {
+  if (req.nivel === 'admin' || req.nivel === 'docente') {
+    API.deleteFile(req.params._id, req.params._idFicheiro, req.cookies.token)
+      .then(dados => res.redirect(`/cadeiras/${req.params._id}/ficheiros`))
+      .catch(erro => res.render('error', { error: erro }));
+  }
+});
+
 // GET /cadeiras/:_id/sumario/add (docentes)
 router.get('/cadeiras/:_id/sumario/add', Auth.auth, function(req, res, next) {
   if (req.nivel === 'docente') {
     API.getCadeira(req.params._id, req.cookies.token)
       .then(({ cadeiraData, docentesData }) => {
-        res.render('sumarioAddForm', {title: 'Adicionar Sumário', cadeira: cadeiraData, nivel: req.nivel})
+        res.render('sumarioAddForm', {title: 'Adicionar Sumário', cadeira: cadeiraData, nivel: req.nivel, userID: req.idUser})
       })
       .catch(erro => res.render('error', {error: erro}))
   }
@@ -101,26 +147,51 @@ router.get('/cadeiras/:_id/sumario/add', Auth.auth, function(req, res, next) {
 
 // GET /cadeiras/:_id/alunos
 router.get('/cadeiras/:_id/alunos', Auth.auth, function(req, res, next) {
-  API.listAlunos(req.params._id, req.cookies.token)
-    .then(dados => res.render('cadeiraAlunos', {alunos: dados}))
-    .catch(erro => res.render('error', {error: erro}))
+  if (req.nivel === 'admin' || req.nivel === 'docente') {
+    API.getCadeira(req.params._id, req.cookies.token)
+      .then(({ cadeiraData, docentesData }) => {
+        API.listAlunos(req.params._id, req.cookies.token)
+          .then(alunosData =>{
+            res.render('cadeiraAlunos', { title: 'Alunos', cadeira: cadeiraData, alunos: alunosData.data, nivel: req.nivel, userID: req.idUser})
+      })
+          .catch(erro => res.render('error', { error: erro }));
+      })
+      .catch(erro => res.render('error', { error: erro }));
+  }
+});
+
+// GET /cadeiras/:_id/alunos/:_idAluno/remove
+router.get('/cadeiras/:_id/alunos/:_idAluno/remove', Auth.auth, function(req, res, next) {
+  if (req.nivel === 'admin' || req.nivel === 'docente') {
+    API.removeAlunoCadeira(req.params._id, req.params._idAluno, req.cookies.token)
+      .then(dados => res.redirect(`/cadeiras/${req.params._id}/alunos`))
+      .catch(erro => res.render('error', { error: erro }));
+  }
+});
+
+// GET /users/:_id/cadeiras/adicionar
+router.get('/users/:_id/cadeiras/adicionar', Auth.auth, function(req, res, next) {
+  if (req.nivel === 'aluno') {
+    API.cadeirasSemAluno(req.idUser, req.cookies.token)
+      .then(dados => {
+        res.render('alunoAddCadeira', { title: 'Adicionar Cadeira', cadeiras: dados.data, nivel: req.nivel, userID: req.idUser})
+      })
+      .catch(erro => res.render('error', { error: erro }))
+  }
 });
 
 // GET /users/:_id
 router.get('/users/:_id', Auth.auth, function(req, res, next) {
-  const userData = API.getUserData(req.idUser, req.cookies.token);
-  const userCadeiras = API.getCadeirasUser(req.idUser, req.nivel, req.cookies.token);
-
-  Promise.all([userData, userCadeiras])
-    .then(([userData, userCadeiras]) => {
-      res.render('perfilPage', { title: 'Perfil', user: userData.data, cadeiras: userCadeiras, nivel: req.nivel });
+  API.getUserData(req.params._id, req.cookies.token)
+    .then(response => {
+      API.getCadeirasUser(req.params._id, response.data.nivel, req.cookies.token)
+        .then(dados => {
+          res.render('perfilPage', { title: response.data.nome, user: response.data, cadeiras: dados, nivel: req.nivel, userID: req.idUser })
+        })
+        .catch(erro => res.render('error', { error: erro }))
     })
-    .catch(erro => res.render('error', { error: erro }));
+    .catch(erro => res.render('error', { error: erro }))
 });
-
-// GET /cadeiras/:_id/ficheiros
-
-// GET /cadeiras/:_id/ficheiros/:_idFicheiro
 
 // POST /login
 router.post('/login', function(req, res, next) {
@@ -163,6 +234,40 @@ router.post('/cadeiras/add', Auth.auth, function(req, res, next) {
   }
 });
 
+// POST /cadeiras/:_id/ficheiros/upload
+router.post('/cadeiras/:_id/ficheiros/upload', upload.single('ficheiro'), Auth.auth, function(req, res, next) {
+  if (req.nivel === 'admin' || req.nivel === 'docente') {
+    const oldPath = req.file.path;
+    const newPath = path.join(__dirname, '/../public/fileStore/', req.file.originalname);
+
+    console.log(`Old Path: ${oldPath}`);
+    console.log(`New Path: ${newPath}`);
+
+    const destDir = path.dirname(newPath);
+    fs.mkdirSync(destDir, { recursive: true });
+
+    fs.rename(oldPath, newPath, (err) => {
+      if (err) {
+        console.error('File moving error:', err);
+        return res.render('error', { error: err });
+      }
+
+      const fileData = {
+        nome: req.file.originalname,
+        descricao: req.body.descricao,
+        path: newPath,
+        mimetype: req.file.mimetype,
+        data: new Date().toISOString(),
+        cadeira: req.params._id
+      };
+
+      API.uploadFile(req.params._id, fileData, req.cookies.token)
+        .then(dados => res.redirect(`/cadeiras/${req.params._id}`))
+        .catch(erro => res.render('error', { error: erro }));
+    });
+  }
+});
+
 // POST /cadeiras/:_id/sumario/add (docentes)
 router.post('/cadeiras/:_id/sumario/add', Auth.auth, function(req, res, next) {
   if (req.nivel === 'docente') {
@@ -183,27 +288,24 @@ router.post('/cadeiras/:_id/update', Auth.auth, function(req, res, next) {
     .catch(erro => res.render('error', {error: erro}))
 });
 
-// POST /cadeiras/:_id/ficheiros
-
-// PUT /cadeiras/:_id
-
-// PUT /cadeiras/:_id/ficheiros/:_idFicheiro
-
-// DELETE /cadeiras/:_id
-router.delete('/cadeiras/:_id', Auth.auth, function(req, res, next) {
-  if (req.isAdmin || req.isDocente) {
-    API.deleteCadeira(req.params._id, req.cookies.token)
-      .then(dados => {
-        if (req.isAdmin) {
-          res.redirect('/cadeiras')
-        } else {
-          res.redirect(`/cadeiras/${req.idUser}`)
-        }
-      })
+// POST /users/:_id/cadeiras/adicionar
+router.post('/users/:_id/cadeiras/adicionar', Auth.auth, function(req, res, next) {
+  if (req.nivel === 'aluno') {
+    API.addCadeiraUser(req.params._id, req.body, req.cookies.token)
+      .then(dados => res.redirect(`/cadeiras`))
       .catch(erro => res.render('error', {error: erro}))
   }
 });
 
-// DELETE /cadeiras/:_id/ficheiros/:_idFicheiro
+// GET /cadeiras/:_id/delete
+router.get('/cadeiras/:_id/delete', Auth.auth, function(req, res, next) {
+  if (req.nivel === 'admin' || req.nivel === 'docente') {
+    API.deleteCadeira(req.params._id, req.cookies.token)
+      .then(dados => {
+        res.redirect('/cadeiras')
+      })
+      .catch(erro => res.render('error', {error: erro}))
+  }
+});
 
 module.exports = router;

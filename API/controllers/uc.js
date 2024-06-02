@@ -20,9 +20,14 @@ module.exports.addSumario = (id, sumario) => {
     return Uc.updateOne({_id: id}, {$push: {aulas: sumario}})
 };
 
+// cadeiras onde o ID nao esta nos inscritos
+module.exports.listCadeirasSemAluno = id => {
+    return Uc.find({inscritos: {$ne: id}}).exec()
+};
+
 // remover uma uc por id (so o coordenador da uc pode remover)
-module.exports.remove = (id, idDocente) => {
-    return Uc.deleteOne({_id: id, 'docentes.0': idDocente})
+module.exports.remove = (id) => {
+    return Uc.deleteOne({_id: id})
 };
 
 // atualizar uma uc por id
@@ -32,5 +37,13 @@ module.exports.update = (id, uc,) => {
 
 // listar alunos inscritos numa uc
 module.exports.listInscritos = id => {
-    return Uc.findOne({_id: id}).populate('inscritos').exec()
+    return Uc.findOne({_id: id}).select('inscritos').exec()
+};
+
+module.exports.addInscrito = (id, idAluno) => {
+    return Uc.updateOne({_id: id}, {$addToSet: {inscritos: idAluno}})
+};
+
+module.exports.removeInscrito = (id, idAluno) => {
+    return Uc.updateOne({_id: id}, {$pull: {inscritos: idAluno}})
 };

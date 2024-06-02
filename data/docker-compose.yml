@@ -9,24 +9,8 @@ services:
   mongo-seed-0:
     image: mongo:latest
     volumes:
-      - C:\Users\Admin\EW_projeto\data\users.json:/datasets/dataset0.json
-    command: mongoimport --host mongodb -d ucWebsites -c users --type json --file /datasets/dataset0.json --jsonArray
-    depends_on:
-      - mongodb
-
-  mongo-seed-1:
-    image: mongo:latest
-    volumes:
-      - C:\Users\Admin\EW_projeto\data\ucs.json:/datasets/dataset1.json
-    command: mongoimport --host mongodb -d ucWebsites -c ucs --type json --file /datasets/dataset1.json --jsonArray
-    depends_on:
-      - mongodb
-
-  mongo-seed-2:
-    image: mongo:latest
-    volumes:
-      - C:\Users\Admin\EW_projeto\data\ficheiros.json:/datasets/dataset2.json
-    command: mongoimport --host mongodb -d ucWebsites -c ficheiros --type json --file /datasets/dataset2.json --jsonArray
+      - C:\Users\Admin\EW_projeto\data\ucs.json:/datasets/dataset0.json
+    command: mongoimport --host mongodb -d ucWebsites -c ucs --type json --file /datasets/dataset0.json --jsonArray
     depends_on:
       - mongodb
 

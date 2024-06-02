@@ -6,19 +6,38 @@ block content
 
   nav(class="w3-bar w3-light-grey")
     a(href="/cadeiras" class="w3-bar-item w3-button") Cadeiras
+
     a(href="/perfil" class="w3-bar-item w3-button") Perfil
+
     if nivel == 'docente' || nivel == 'admin'
       a(href="/cadeiras/add" class="w3-bar-item w3-button") Nova Cadeira
+
+    if nivel == 'aluno'
+      a(href=`/users/${userID}/cadeiras/adicionar` class="w3-bar-item w3-button") Adicionar Cadeira
+
     a(href="/logout" class="w3-bar-item w3-button") Logout
 
   div(class="w3-container")
     h2 Lista de Cadeiras
     if cadeiras.length > 0
-      ul(class="w3-ul w3-card-4")
-        for cadeira in cadeiras
-          if cadeira.titulo && cadeira._id
-            li(class="w3-bar")
-              span(class="w3-bar-item")
-              a(href=`/cadeiras/${cadeira._id}`) #{cadeira.titulo}
+      table(class="w3-table w3-striped w3-bordered w3-card-4")
+        thead
+          tr
+            th Título
+            th Ações
+        tbody
+          each cadeira in cadeiras
+            tr
+              td 
+                a(href=`/cadeiras/${cadeira._id}`) #{cadeira.titulo}
+              td
+                if (nivel == 'docente' || nivel == 'admin') && cadeira.docentes[0] == userID 
+                  a(href=`/cadeiras/${cadeira._id}/delete` class="w3-button w3-blue") Apagar
+                
+                else if nivel == 'aluno'
+                  a(href=`/cadeiras/${cadeira._id}/alunos/${userID}/remove` class="w3-button w3-red") Remover
+
+                else 
+                  span Sem ações
     else
       p Sem cadeiras

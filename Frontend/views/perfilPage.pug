@@ -5,9 +5,16 @@ block content
     h1 #{title} de #{user.nome}
 
   nav(class="w3-bar w3-light-grey w3-padding-8")
+
     a(href="/cadeiras" class="w3-bar-item w3-button") Cadeiras
+
     a(href="/perfil" class="w3-bar-item w3-button") Perfil
+
     a(href="/perfil/update" class="w3-bar-item w3-button") Editar
+
+    if nivel == 'aluno'
+      a(href=`/users/${userID}/cadeiras/adicionar` class="w3-bar-item w3-button") Adicionar Cadeira
+
     a(href="/logout" class="w3-bar-item w3-button") Logout
 
   div(class="w3-container w3-margin-top")
@@ -20,6 +27,7 @@ block content
         if user.nivel == 'admin'
           h2 Perfil de Admin
         
+        p ID: #{user._id}
         p Nome: #{user.nome}
         p Email: #{user.email}
         p Numero: #{user.numero}
