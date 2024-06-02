@@ -74,13 +74,15 @@ router.get('/cadeiras/:_id/ficheiros', auth, function(req, res) {
 
 // GET /cadeiras/:_id/ficheiros/:_idFicheiro/download
 router.get('/cadeiras/:_id/ficheiros/:_idFicheiro/download', auth, function(req, res) {
-    if (req.user) {
-        Ficheiro.lookUp(req.params._idFicheiro)
-            .then(data => {
-                res.download(data.path)
-            })
-            .catch(error => res.status(500).jsonp(error))
-    }
+    Ficheiro.lookUp(req.params._idFicheiro)
+        .then(data => {
+            if (data) {
+                res.status(200).jsonp(data)
+            } else {
+                res.status(404).jsonp({error: 'File not found'})
+            }
+        })
+        .catch(error => res.status(500).jsonp(error))
 });
 
 // GET /users

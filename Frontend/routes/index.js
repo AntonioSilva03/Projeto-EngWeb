@@ -126,7 +126,6 @@ router.get('/cadeiras/:_id/ficheiros/:_idFicheiro/download', Auth.auth, function
     .then(dados => {
       const file = dados.data;
       const filePath = path.join(__dirname, '/../public/fileStore/', file.nome);
-      
       res.download(filePath, file.nome);
     })
     .catch(erro => res.render('error', { error: erro }));

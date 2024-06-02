@@ -105,7 +105,7 @@ module.exports.ficheirosCadeira = (idCadeira, token) => {
 }
 
 module.exports.getFile = (idCadeira, idFicheiro, token) => {
-    return axios.get(`http://localhost:7776/cadeiras/${idCadeira}/ficheiros/${idFicheiro}?token=${token}`)
+    return axios.get(`http://localhost:7776/cadeiras/${idCadeira}/ficheiros/${idFicheiro}/download?token=${token}`)
         .then(dados => { return dados })
         .catch(erro => { throw erro })
 }
