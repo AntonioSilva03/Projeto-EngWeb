@@ -292,10 +292,6 @@ router.put('/users/:_id', auth, function(req, res) {
 
 // PUT /cadeiras/:_id/alunos/:_idAluno/remove
 router.put('/cadeiras/:_id/alunos/:_idAluno/remove', auth, function(req, res) {
-    if (req.user.level != 'docente' && req.user.level != 'admin') {
-        res.status(401).jsonp({error: 'User not authorized'})
-        return
-    }
     Uc.removeInscrito(req.params._id, req.params._idAluno)
         .then(data => {
             User.removeCadeira(req.params._idAluno, req.params._id)
@@ -311,10 +307,9 @@ router.delete('/cadeiras/:_id/delete', auth, function(req, res) {
         res.status(401).jsonp({error: 'User not authorized'})
         return
     }
-    
     Uc.lookUp(req.params._id)
         .then(uc => {
-            if (uc.docentes[0] === req.user._id) {
+            if (uc.docentes[0] === req.user._id || req.user.level === 'admin') {
                 Uc.remove(req.params._id)
                     .then(data => res.jsonp(data))
                     .catch(error => res.status(500).jsonp(error))

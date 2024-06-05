@@ -4,7 +4,6 @@ block content
   .w3-card-4.w3-container.w3-margin-top
     header.w3-bar.w3-wide.w3-card.w3-teal
       h1.w3-bar-item Login
-      button#Action.w3-btn.w3-bar-item(type="submit" form="login" style="margin-top: 12px;") CONFIRMAR
       a#Action.w3-btn.w3-bar-item(href="/register" style="margin-top: 12px;") REGISTAR
       
     form#login.w3-container(action="/login" method="POST" style="padding-top: 30px; padding-bottom: 20px;")
@@ -15,6 +14,8 @@ block content
       fieldset.w3-margin-bottom
         label.w3-text-teal Password
         input.w3-input(type="password" name="password" style="margin-bottom: 16px;")
+
+      button(type="submit" form="login" style="margin-top: 12px;" class='w3-button w3-teal') CONFIRMAR
 
       div(style="color: red; margin-bottom: 16px;")
         h3 #{message}

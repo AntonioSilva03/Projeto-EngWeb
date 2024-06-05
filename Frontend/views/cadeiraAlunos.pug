@@ -12,7 +12,7 @@ block content
     if nivel == 'docente' || nivel == 'admin'
       a(href="/cadeiras/add" class="w3-bar-item w3-button") Nova Cadeira
 
-    if (nivel == 'docente' || nivel == 'admin') && cadeira.docentes[0] == userID
+    if ( (nivel == 'docente' && cadeira.docentes[0] == userID ) || nivel == 'admin' )
       a(href=`/cadeiras/${cadeira._id}/update` class="w3-bar-item w3-button") Editar Cadeira
 
     if nivel == 'docente'
@@ -23,7 +23,7 @@ block content
 
     a(href=`/cadeiras/${cadeira._id}/ficheiros` class="w3-bar-item w3-button") Ficheiros
 
-    if (nivel == 'admin' || nivel == 'docente') && cadeira.docentes[0] == userID
+    if ( (nivel == 'docente' && cadeira.docentes[0] == userID ) ) || nivel == 'admin' 
       a(href=`/cadeiras/${cadeira._id}/ficheiros/upload` class="w3-bar-item w3-button") Upload de Ficheiros
 
     a(href="/logout" class="w3-bar-item w3-button") Logout
@@ -47,7 +47,7 @@ block content
                 a(href=`/users/${aluno._id}`) #{aluno.nome}
               td #{aluno.numero}
               td
-                if cadeira.docentes[0] == userID
+                if cadeira.docentes[0] == userID || nivel == 'admin'
                   a(href=`/cadeiras/${cadeira._id}/alunos/${aluno._id}/remove` class="w3-button w3-red") Remover
 
                 else 

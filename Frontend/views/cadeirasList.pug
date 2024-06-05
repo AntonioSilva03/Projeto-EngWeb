@@ -31,7 +31,7 @@ block content
               td 
                 a(href=`/cadeiras/${cadeira._id}`) #{cadeira.titulo}
               td
-                if (nivel == 'docente' || nivel == 'admin') && cadeira.docentes[0] == userID 
+                if (nivel == 'docente' && cadeira.docentes[0] == userID ) || nivel == 'admin'
                   a(href=`/cadeiras/${cadeira._id}/delete` class="w3-button w3-blue") Apagar
                 
                 else if nivel == 'aluno'

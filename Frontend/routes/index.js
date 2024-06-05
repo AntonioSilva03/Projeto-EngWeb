@@ -168,11 +168,12 @@ router.get('/cadeiras/:_id/alunos', Auth.auth, function(req, res, next) {
 
 // GET /cadeiras/:_id/alunos/:_idAluno/remove
 router.get('/cadeiras/:_id/alunos/:_idAluno/remove', Auth.auth, function(req, res, next) {
-  if (req.nivel === 'admin' || req.nivel === 'docente') {
-    API.removeAlunoCadeira(req.params._id, req.params._idAluno, req.cookies.token)
-      .then(dados => res.redirect(`/cadeiras/${req.params._id}/alunos`))
-      .catch(erro => res.render('error', { error: erro }));
-  }
+  API.removeAlunoCadeira(req.params._id, req.params._idAluno, req.cookies.token)
+    .then(dados => {
+      if (req.nivel === 'aluno') res.redirect('/cadeiras')
+      else res.redirect(`/cadeiras/${req.params._id}/alunos`)
+    })
+    .catch(erro => res.render('error', { error: erro }));
 });
 
 // GET /users/:_id/cadeiras/adicionar
@@ -214,14 +215,18 @@ router.post('/login', function(req, res, next) {
 
 // POST /register
 router.post('/register', function(req, res, next) {
-  axios.post('http://localhost:7778/users/register', req.body)
-    .then(response => {
-      res.cookie('token', response.data.token)
-      res.redirect('/login')
-    })
-    .catch(erro => {
-      res.render('error', {error: erro})
-    })
+  if (req.body.nivel === 'admin') {
+    res.render('register', {message: 'Não é possível registar como administrador'})
+  } else {
+    axios.post('http://localhost:7778/users/register', req.body)
+      .then(response => {
+        res.cookie('token', response.data.token)
+        res.redirect('/login')
+      })
+      .catch(erro => {
+        res.render('error', {error: erro})
+      })
+  }
 });
 
 // POST /perfil/update/:_id

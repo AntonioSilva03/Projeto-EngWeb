@@ -4,7 +4,6 @@ block content
   .w3-card-4.w3-container.w3-margin-top
     header.w3-bar.w3-wide.w3-card.w3-teal
       h1.w3-bar-item Registar
-      button#Action.w3-btn.w3-bar-item(type="submit" form="Register" style="margin-top: 12px;") CONFIRMAR
       a#Action.w3-btn.w3-bar-item(href="/login" style="margin-top: 12px;") Login
 
     form#Register.w3-container(action="/register" method="POST" style="padding-top: 30px; padding-bottom: 20px;")
@@ -38,3 +37,5 @@ block content
         label(for="aluno") Aluno 
         input.w3-radio(type="radio" name="nivel" value="docente" id="docente")
         label(for="docente") Docente 
+
+      button(type="submit" form="Register" style="margin-top: 12px;" class='w3-button w3-teal') CONFIRMAR

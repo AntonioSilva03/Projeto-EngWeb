@@ -38,6 +38,36 @@ router.post('/register', function(req, res) {
   });
 });
 
+// POST /register/admin
+router.post('/register/admin', function(req, res) {
+  const newUser = new userModel({ 
+    _id: req.body._id || new mongoose.Types.ObjectId(),
+    numero: req.body.numero || Math.floor(Math.random() * 1000000).toString(),
+    nome: req.body.nome, 
+    email: req.body.email,
+    nivel: 'admin',
+    ano: "",
+    foto: "",
+    filiacao: 'admin',
+    categoria: 'admin',
+    webpage: '',
+    cursos: [],
+    cadeiras: []
+  });
+
+  userModel.register(newUser, req.body.password, function(err, user) {
+    if (err) {
+      console.error("Registration error:", err);
+      return res.status(409).jsonp({ error: err, message: "Register error: " + err });
+    }
+
+    else {
+      console.log("User registered successfully");
+      res.status(201).jsonp({ message: "Admin registered successfully" });
+    }
+  });
+});
+
 // POST /login
 router.post('/login', function(req, res, next) {
   // Check if request body has email and password
