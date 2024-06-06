@@ -172,6 +172,25 @@ module.exports.deleteCadeira = (_id, token) => {
         .catch(erro => { throw erro })
 }
 
+module.exports.deleteUser = (_id, data, token) => {
+    try {
+        const userDeletePromisse = axios.delete(`http://localhost:7778/users/${_id}?token=${token}`, data);
+
+        const removeUserFromCadeirasPromisse = axios.put(`http://localhost:7776/users/${_id}/cadeiras/remove?token=${token}`);
+
+        return Promise.all([userDeletePromisse, removeUserFromCadeirasPromisse])
+            .then(responses => {
+                const [userDeleteResponse, removeUserFromCadeirasResponse] = responses;
+                return { userDeleteResponse: userDeleteResponse.data, removeUserFromCadeirasResponse: removeUserFromCadeirasResponse.data };
+            })
+            .catch(error => {
+                throw error;
+            });
+    } catch (error) {
+        throw error;
+    }
+}
+
 module.exports.listDocentes = (token) => {
     return axios.get(`http://localhost:7776/users/docentes?token=${token}`)
         .then(dados => { return dados })

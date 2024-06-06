@@ -290,6 +290,15 @@ router.put('/users/:_id', auth, function(req, res) {
     }
 });
 
+// PUT /users/:_id/cadeiras/remove
+router.put('/users/:_id/cadeiras/remove', auth, function(req, res) {
+    Uc.removerAluno(req.params._id)
+        .then(data => {
+            res.status(201).jsonp(data)
+        })
+        .catch(error => res.status(500).jsonp(error))
+});
+
 // PUT /cadeiras/:_id/alunos/:_idAluno/remove
 router.put('/cadeiras/:_id/alunos/:_idAluno/remove', auth, function(req, res) {
     Uc.removeInscrito(req.params._id, req.params._idAluno)

@@ -1,0 +1,17 @@
+extends layout
+
+block content
+  header(class="w3-container w3-teal w3-padding-16")
+    h1 #{title} de #{user.nome}
+
+  nav(class="w3-bar w3-light-grey w3-padding-8")
+    a(href="/cadeiras" class="w3-bar-item w3-button") Cadeiras
+    a(href="/perfil" class="w3-bar-item w3-button") Perfil
+    a(href="/perfil/update" class="w3-bar-item w3-button") Editar
+    a(href="/logout" class="w3-bar-item w3-button") Logout
+
+  div(class="w3-container")
+    form(action=`/perfil/${user._id}/delete` method="post" class="w3-container w3-card-4 w3-padding")
+      label(for="password") Password para confirmar ação:
+      input(type="password" id="password" name="nome" class="w3-input w3-border")
+      button(type="submit" class="w3-button w3-red w3-margin-top") Apagar Conta

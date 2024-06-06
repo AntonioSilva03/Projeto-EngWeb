@@ -47,3 +47,7 @@ module.exports.addInscrito = (id, idAluno) => {
 module.exports.removeInscrito = (id, idAluno) => {
     return Uc.updateOne({_id: id}, {$pull: {inscritos: idAluno}})
 };
+
+module.exports.removerAluno = (idAluno) => {    
+    return Uc.updateMany({inscritos: idAluno}, {$pull: {inscritos: idAluno}})
+};

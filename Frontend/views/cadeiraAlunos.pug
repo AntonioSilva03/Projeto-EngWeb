@@ -42,13 +42,14 @@ block content
             td(colspan="2") Não existem alunos inscritos
         else
           each aluno in alunos
-            tr
-              td 
-                a(href=`/users/${aluno._id}`) #{aluno.nome}
-              td #{aluno.numero}
-              td
-                if cadeira.docentes[0] == userID || nivel == 'admin'
-                  a(href=`/cadeiras/${cadeira._id}/alunos/${aluno._id}/remove` class="w3-button w3-red") Remover
+            if aluno != null
+              tr
+                td 
+                  a(href=`/users/${aluno._id}`) #{aluno.nome}
+                td #{aluno.numero}
+                td
+                  if cadeira.docentes[0] == userID || nivel == 'admin'
+                    a(href=`/cadeiras/${cadeira._id}/alunos/${aluno._id}/remove` class="w3-button w3-red") Remover
 
-                else 
-                  span Sem ações
+                  else 
+                    span Sem ações

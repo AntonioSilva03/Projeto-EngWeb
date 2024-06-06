@@ -36,6 +36,16 @@ python register_users.py # necessário ter tudo a correr
 
 **Nota:** a password das contas importadas é "1234"
 
+Para registar o admin pode ser feito um pedido ao servidor de autenticação com o body:
+
+```json
+{
+    "nome": "Administrador",
+    "email": "admin@ucwebsites.com",
+    "password": "admin"
+}
+```
+
 ## Portas
 
 - Auth -> 7778

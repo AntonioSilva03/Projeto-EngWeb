@@ -36,3 +36,7 @@ block content
       input(type="text" id="webpage" name="webpage" value=user.webpage class="w3-input w3-border")
 
       button(type="submit" class="w3-button w3-teal w3-margin-top") Guardar
+
+      if (user._id === userID || nivel === 'admin')
+        div(class="w3-container w3-margin-top")
+          a(href=`/perfil/delete/${user._id}` class="w3-button w3-red") Apagar Conta

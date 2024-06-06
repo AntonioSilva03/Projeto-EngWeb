@@ -2,7 +2,7 @@ extends layout
 
 block content
   header(class="w3-container w3-teal w3-padding-16")
-    h1 #{title} de #{user.nome}
+    h1 Perfil de #{user.nome}
 
   nav(class="w3-bar w3-light-grey w3-padding-8")
 
@@ -10,7 +10,8 @@ block content
 
     a(href="/perfil" class="w3-bar-item w3-button") Perfil
 
-    a(href="/perfil/update" class="w3-bar-item w3-button") Editar
+    if ( userID == user._id ) || nivel == 'admin'
+      a(href=`/perfil/update/${user._id}` class="w3-bar-item w3-button") Editar
 
     if nivel == 'aluno'
       a(href=`/users/${userID}/cadeiras/adicionar` class="w3-bar-item w3-button") Adicionar Cadeira

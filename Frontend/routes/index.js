@@ -43,9 +43,18 @@ router.get('/perfil', Auth.auth, function(req, res, next) {
 });
 
 // GET /perfil/update
-router.get('/perfil/update', Auth.auth, function(req, res, next) {
-  API.getUserData(req.idUser, req.cookies.token)
+router.get('/perfil/update/:_id', Auth.auth, function(req, res, next) {
+  API.getUserData(req.params._id, req.cookies.token)
     .then(dados => res.render('perfilUpdateForm', {title: 'Editar perfil', user: dados.data, nivel: req.nivel, userID: req.idUser}))
+    .catch(erro => res.render('error', {error: erro}))
+});
+
+// GET /perfil/:_id/delete
+router.get('/perfil/delete/:_id', Auth.auth, function(req, res, next) {
+  API.getUserData(req.params._id, req.cookies.token)
+    .then(dados => {
+      res.render('deleteProfile', {title: 'Apagar Conta', userID: req.idUser, nivel: req.nivel, user: dados.data})
+    })
     .catch(erro => res.render('error', {error: erro}))
 });
 
@@ -158,6 +167,7 @@ router.get('/cadeiras/:_id/alunos', Auth.auth, function(req, res, next) {
       .then(({ cadeiraData, docentesData }) => {
         API.listAlunos(req.params._id, req.cookies.token)
           .then(alunosData =>{
+            console.log(alunosData.data)
             res.render('cadeiraAlunos', { title: 'Alunos', cadeira: cadeiraData, alunos: alunosData.data, nivel: req.nivel, userID: req.idUser})
       })
           .catch(erro => res.render('error', { error: erro }));
@@ -313,6 +323,22 @@ router.get('/cadeiras/:_id/delete', Auth.auth, function(req, res, next) {
     API.deleteCadeira(req.params._id, req.cookies.token)
       .then(dados => {
         res.redirect('/cadeiras')
+      })
+      .catch(erro => res.render('error', {error: erro}))
+  }
+});
+
+// POST /perfil/:_id/delete
+router.post('/perfil/:_id/delete', Auth.auth, function(req, res, next) {
+  if (req.nivel === 'admin' || req.idUser === req.params._id) {
+    API.deleteUser(req.params._id, req.body, req.cookies.token)
+      .then(dados => {
+        if (req.nivel !== 'admin') {
+          res.clearCookie('token')
+          res.redirect('/login')
+        } else {
+          res.redirect('/cadeiras')
+        }
       })
       .catch(erro => res.render('error', {error: erro}))
   }
