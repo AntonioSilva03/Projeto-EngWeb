@@ -123,42 +123,36 @@ router.post('/login', function(req, res, next) {
 });
 
 // POST /password
-router.post('/password', function(req, res) {
-  // Check if request body has email, password, and newPassword
-  if (!req.body.email || !req.body.newPassword) {
+router.post('/password', auth.verify, function(req, res) {
+  if (!req.body.email || !req.body.password || !req.body.newPassword) {
     console.error("Email, password, and newPassword are required");
     return res.status(400).jsonp({ error: 'Email, password, and newPassword are required' });
   }
 
-  // Authenticate user with their current credentials
-  passport.authenticate('local', function(err, user, info) {
+  passport.authenticate('local', async function(err, user, info) {
     if (err) {
       console.error("Error during authentication:", err);
       return res.status(500).jsonp({ error: err.message });
     }
+
     if (!user) {
       console.error("Authentication failed:", info ? info.message : 'No user');
       return res.status(401).jsonp({ error: 'Authentication failed: ' + (info ? info.message : 'No user') });
     }
 
-    // User authentication successful, update password
-    user.setPassword(req.body.newPassword, async function(err) {
-      if (err) {
-        console.error("Error setting new password:", err);
-        return res.status(500).jsonp({ error: err.message });
-      }
-
-      // Save user with new password
-      user.save(function(err) {
-        if (err) {
-          console.error("Error saving user:", err);
-          return res.status(500).jsonp({ error: err.message });
-        }
-
-        console.log("Password updated successfully");
-        res.status(200).jsonp({ message: "Password updated successfully" });
-      });
-    });
+    try {
+      await user.setPassword(req.body.newPassword);
+      
+      await user.save();
+      
+      console.log(user)
+      
+      console.log("Password updated successfully");
+      res.status(200).jsonp({ message: "Password updated successfully" });
+    } catch (err) {
+      console.error("Error setting new password:", err);
+      return res.status(500).jsonp({ error: err.message });
+    }
   })(req, res);
 });
 

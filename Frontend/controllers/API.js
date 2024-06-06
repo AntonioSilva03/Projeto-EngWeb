@@ -9,10 +9,12 @@ module.exports.getUserData = (userID, token) => {
 module.exports.updateUserData = (userID, data, token) => {
     const updateUserPromise = axios.put(`http://localhost:7776/users/${userID}?token=${token}`, data);
     
-    // Auth server
-    const updatePasswordPromise = axios.post(`http://localhost:7778/users/password?token=${token}`, data);
+    let updatePasswordPromise = Promise.resolve({data: 'Password update not required'});
 
-    // Wait for both requests to complete
+    if (data.password && data.newPassword) {
+        updatePasswordPromise = axios.post(`http://localhost:7778/users/password?token=${token}`, data);
+    }
+
     return Promise.all([updateUserPromise, updatePasswordPromise])
         .then(responses => {
             const [userDataResponse, passwordResponse] = responses;
