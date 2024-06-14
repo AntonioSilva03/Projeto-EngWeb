@@ -1,0 +1,37 @@
+services:
+  ex1:
+    build:
+      context: ./api
+    ports:
+      - "7776:7776"
+    depends_on:
+      - mongodb
+  
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "7777:7777"
+    depends_on:
+      - api
+
+  auth:
+    build:
+      context: ./auth
+    ports:
+      - "7778:7778"
+    depends_on:
+      - mongodb
+  
+  mongodb:
+    image: mongo
+    ports:
+      - "27017:27017"
+    depends_on:
+      - seed
+  
+  seed:
+    image: mongo
+    volumes:
+      - ./data/ucs.json:/ucs.json
+    command: mongoimport --host mongodb -d ucWebsites -c ucs --type json --file ucs.json --jsonArray

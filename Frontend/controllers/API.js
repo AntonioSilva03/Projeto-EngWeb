@@ -118,6 +118,12 @@ module.exports.deleteFile = (idCadeira, idFicheiro, token) => {
         .catch(erro => { throw erro })
 }
 
+module.exports.listAllFiles = (token) => {
+    return axios.get(`http://localhost:7776/ficheiros?token=${token}`)
+        .then(dados => { return dados })
+        .catch(erro => { throw erro })
+}
+
 module.exports.cadeirasSemAluno = (idAluno, token) => {
     return axios.get(`http://localhost:7776/users/${idAluno}/cadeiras/adicionar?token=${token}`)
         .then(dados => { return dados })
@@ -193,6 +199,12 @@ module.exports.deleteUser = (_id, data, token) => {
 
 module.exports.listDocentes = (token) => {
     return axios.get(`http://localhost:7776/users/docentes?token=${token}`)
+        .then(dados => { return dados })
+        .catch(erro => { throw erro })
+}
+
+module.exports.listAllUsers = (token) => {
+    return axios.get(`http://localhost:7776/users?token=${token}`)
         .then(dados => { return dados })
         .catch(erro => { throw erro })
 }

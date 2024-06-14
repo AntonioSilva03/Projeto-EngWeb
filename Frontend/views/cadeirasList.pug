@@ -17,6 +17,9 @@ block content
 
     a(href="/logout" class="w3-bar-item w3-button") Logout
 
+    if nivel == 'admin'
+      a(href=`/downloadall` class="w3-bar-item w3-button w3-blue") Exportar Dados
+
   div(class="w3-container")
     h2 Lista de Cadeiras
     if cadeiras.length > 0

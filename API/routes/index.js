@@ -63,6 +63,15 @@ router.get('/cadeiras/:_id/alunos', auth, function(req, res) {
     }
 });
 
+// GET /ficheiros
+router.get('/ficheiros', auth, function(req, res) {
+    if (req.user) {
+        Ficheiro.list()
+            .then(data => res.jsonp(data))
+            .catch(error => res.status(500).jsonp(error))
+    }
+});
+
 // GET /cadeiras/:_id/ficheiros
 router.get('/cadeiras/:_id/ficheiros', auth, function(req, res) {
     if (req.user) {

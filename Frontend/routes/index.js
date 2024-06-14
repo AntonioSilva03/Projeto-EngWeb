@@ -7,8 +7,56 @@ var multer = require('multer');
 var axios = require('axios');
 var API = require('../controllers/API');
 var Auth = require('../controllers/Auth');
+const zip = require('express-zip');
 
 var upload = multer({ dest: 'uploads/' });
+
+// GET /downloadall
+router.get('/downloadall', Auth.auth, function(req, res, next) {
+  if (req.nivel === 'admin') {
+    // obter todos os users
+    API.listAllUsers(req.cookies.token)
+      .then(usersData => {
+        // obter todas as cadeiras
+        API.listCadeiras(req.cookies.token)
+          .then(cadeirasData => {
+            // obter todos os ficheiros
+            API.listAllFiles(req.cookies.token)
+              .then(ficheirosData => {
+                // criar um ficheiro JSON com todos os dados
+                const data = {
+                  users: usersData.data,
+                  cadeiras: cadeirasData.data,
+                  ficheiros: ficheirosData.data
+                };
+
+                const filePath = path.join(__dirname, '/../public/fileStore/', 'data.json');
+                jsonfile.writeFile(filePath, data, { spaces: 2 }, (err) => {
+                  if (err) {
+                    console.error('Error writing JSON file:', err);
+                    return res.render('error', { error: err });
+                  }
+                });
+
+                const zip = [
+                  {path: filePath, name: 'data.json'}
+                ];
+
+                // adicionar os ficheiros da filestore ao zip
+                ficheirosData.data.forEach(ficheiro => {
+                  zip.push({path: ficheiro.path, name: ficheiro.nome});
+                });
+
+                res.zip(zip, 'app_data.zip');
+              })
+              .catch(erro => res.render('error', { error: erro }));
+          })
+          .catch(erro => res.render('error', { error: erro }));
+        
+      })
+      .catch(erro => res.render('error', { error: erro }));
+  }
+});
 
 // GET /login
 router.get('/login', function(req, res, next) {

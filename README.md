@@ -1,3 +1,25 @@
+<p align="center">
+  <img src="https://github.com/Duarte0903/DSS_UMinho/blob/main/EEUMLOGO.png"/>
+</p>
+
+<h1 align="center">Engenharia Web - 2023/2024</h1>
+<h2 align="center">Gerador de Sites de UC</h2>
+
+## Grupo
+
+| **Número** | **Nome** |
+|:----------:|:--------:|
+| A100550 | Duarte Machado Leitão |
+| A100600 | Diogo Rafael dos Santos Barros |
+| A100533 | António Filipe Castro Silva |
+| A100646 | Diogo Ribeiro Vassalo de Abreu |
+
+## Indice
+
+- [Frontend](Frontend/README.md/#frontend)
+- [API](API/README.md/#api)
+- [Servidor de Autenticação](Auth/README.md/#auth)
+
 ## Objetivos
 
 - Analisar o dataset de uma UC fornecido e tratá-lo de modo a criar um modelo em MongoDB para o guardar;
@@ -14,27 +36,48 @@
 
 ## Utilizadores
 
-- O sistema deverá estar protegido com autenticação: username+password, chaveAPI, google, facebook, ...
+- O sistema deverá estar protegido com autenticação;
 
 - Deverão existir pelo menos 3 níveis de acesso:
-    - Administrador - tem acesso a todas as operações;
-    - Produtor (autor de recurso) - pode consultar tudo e executar todas as operações sobre os recursos de que é produtor/autor;
-    - Consumidor - pode consultar e descarregar os recursos públicos.
+    - **Administrador**: tem acesso a todas as operações;
+    - **Produtor** (autor de recurso): pode consultar tudo e executar todas as operações sobre os recursos de que é produtor/autor;
+    - **Consumidor**: pode consultar e descarregar os recursos públicos.
 
 - Dados sobre o utilizador a guardar (sugestão):
 nome, email, filiação (estudante, docente, curso, departamento, ...), nível (administrador, produtor ou consumidor), dataRegisto (registo na plataforma), dataUltimoAcesso, password, outros campos que julgue necessários...
 
-## Setup mongo
+## Tratamento de dados
+
+Foram fornecidos 3 datasets, cada um com informação de uma UC específica. Cada UC continha uma lista com docentes e os seus metadados. Achamos relevante ler os 3 datasets e criar 2 datasets novos: um com informação relativa às **UCs** e outro com todos os **docentes** encontrados. Através da criação de ids, cada UC passou a ter apenas o id dos seus docentes e cada docente tem uma lista com ids das UCs que leciona. Cada docente passou ainda a ter uma password que será usada no registo na plataforma. Para tal usou-se o script python:
 
 ```bash
+# executar na diretoria data/
 python read_datasets.py
-
-python launch_container.py ucWebsites ucs ./ucs.json 
-
-python register_users.py # necessário ter tudo a correr
 ```
 
-**Nota:** a password das contas importadas é "1234"
+## Setup
+
+Primeiro é necessário instalar as dependências do frontend, servidor de autenticação e da API. Na diretoria de cada um dos componetes usar o comando:
+
+```bash
+npm install
+```
+
+Para lançar o container docker da base de dados é necessário correr o script:
+
+```bash
+# executar na diretoria data/
+python launch_container.py ucWebsites ucs ./ucs.json 
+```
+
+Todos os docentes presentes no dataset obtido deverão ser registados na plataforma. Para tal criou-se um script que faz pedidos ao servidor de autenticão:
+
+```bash
+# executar na diretoria data/
+python register_users.py
+```
+
+**Nota:** a password das contas importadas é "1234". Posteriormente o proprietário da conta poderá alterar a sua password.
 
 Para registar o admin pode ser feito um pedido ao servidor de autenticação com o body:
 
@@ -45,9 +88,3 @@ Para registar o admin pode ser feito um pedido ao servidor de autenticação com
     "password": "admin"
 }
 ```
-
-## Portas
-
-- Auth -> 7778
-- Frontend -> 7777
-- API -> 7776
