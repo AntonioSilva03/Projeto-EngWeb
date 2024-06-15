@@ -52,10 +52,9 @@ nome, email, filiação (estudante, docente, curso, departamento, ...), nível (
 
 ## Tratamento de dados
 
-Foram fornecidos 3 datasets, cada um com informação de uma UC específica. Cada UC continha uma lista com docentes e os seus metadados. Achamos relevante ler os 3 datasets e criar 2 datasets novos: um com informação relativa às **UCs** e outro com todos os **docentes** encontrados. Através da criação de ids para os docentes e para as UCs, cada UC passou a ter apenas o id dos seus docentes e cada docente tem uma lista com ids das UCs que leciona. Cada docente passou ainda a ter uma password que será usada no registo na plataforma. Para tal usou-se o script python:
+Foram fornecidos 3 datasets, cada um com informação de uma UC específica. Cada UC continha uma lista com docentes e os seus metadados. Achamos relevante ler os 3 datasets e criar 2 datasets novos: um com informação relativa às **UCs** e outro com todos os **docentes** encontrados. Através da criação de ids para os docentes e para as UCs, cada UC passou a ter apenas o id dos seus docentes e cada docente tem uma lista com ids das UCs que leciona. Cada docente passou ainda a ter uma password que será usada no registo na plataforma. Para tal usou-se o script python (executar na diretoria data/):
 
 ```bash
-# executar na diretoria data/
 python read_datasets.py
 ```
 
