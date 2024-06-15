@@ -5,7 +5,7 @@
 <h1 align="center">Engenharia Web - 2023/2024</h1>
 <h2 align="center">Gerador de Sites de UC</h2>
 
-## Grupo
+## Grupo 5
 
 | **Número** | **Nome** |
 |:----------:|:--------:|
