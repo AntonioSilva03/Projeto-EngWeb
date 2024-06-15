@@ -31,7 +31,9 @@ function auth(req, res, next) {
 // GET /cadeiras
 router.get('/cadeiras', function(req, res) {
     Uc.list()
-        .then(data => res.jsonp(data))
+        .then(data => {
+            res.jsonp(data)
+        })
         .catch(error => res.status(500).jsonp(error))
 });
 

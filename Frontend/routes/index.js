@@ -110,6 +110,7 @@ router.get('/perfil/delete/:_id', Auth.auth, function(req, res, next) {
 router.get('/cadeiras', Auth.auth, function(req, res, next) {
   API.getCadeirasUser(req.idUser, req.nivel, req.cookies.token)
     .then(dados => {
+      console.log(dados.data)
       res.render('cadeirasList', {title: 'Cadeiras', cadeiras: dados, nivel: req.nivel, userID: req.idUser})
     })
     .catch(erro => res.render('error', {error: erro}))
@@ -260,13 +261,14 @@ router.get('/users/:_id', Auth.auth, function(req, res, next) {
 
 // POST /login
 router.post('/login', function(req, res, next) {
-  axios.post('http://localhost:7778/users/login', req.body)
+  axios.post(`${process.env.AUTH}/login`, req.body)
     .then(response => {
       res.cookie('token', response.data.token)
       res.redirect('/cadeiras')
     
     })
     .catch(erro => {
+      console.log(erro)
       res.render('login', {message: 'Credenciais inválidas'})
     })
 });
@@ -276,7 +278,7 @@ router.post('/register', function(req, res, next) {
   if (req.body.nivel === 'admin') {
     res.render('register', {message: 'Não é possível registar como administrador'})
   } else {
-    axios.post('http://localhost:7778/users/register', req.body)
+    axios.post(`${process.env.AUTH}/register`, req.body)
       .then(response => {
         res.cookie('token', response.data.token)
         res.redirect('/login')

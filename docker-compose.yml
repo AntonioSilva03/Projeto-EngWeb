@@ -1,7 +1,11 @@
+version: '3.8'
 services:
-  ex1:
+  api:
     build:
       context: ./api
+      dockerfile: Dockerfile
+    environment:
+      - MONGODB_URL=mongodb://mongodb:27017/ucWebsites
     ports:
       - "7776:7776"
     depends_on:
@@ -10,28 +14,36 @@ services:
   frontend:
     build:
       context: ./frontend
+      dockerfile: Dockerfile
+    environment:
+      - API=http://api:7776
+      - AUTH=http://auth:7778/users
     ports:
       - "7777:7777"
     depends_on:
+      - auth
       - api
 
   auth:
     build:
       context: ./auth
+      dockerfile: Dockerfile
+    environment:
+      - MONGODB_URL=mongodb://mongodb:27017/ucWebsites
     ports:
       - "7778:7778"
     depends_on:
       - mongodb
   
   mongodb:
-    image: mongo
+    image: mongo:latest
     ports:
       - "27017:27017"
     depends_on:
       - seed
   
   seed:
-    image: mongo
+    image: mongo:latest
     volumes:
       - ./data/ucs.json:/ucs.json
-    command: mongoimport --host mongodb -d ucWebsites -c ucs --type json --file ucs.json --jsonArray
+    command: mongoimport --host mongodb -d ucWebsites -c ucs --type json --file /ucs.json --jsonArray

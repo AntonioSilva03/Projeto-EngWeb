@@ -6,18 +6,18 @@
         "filiacao": "Dep. Informática - Universidade do Minho",
         "email": "jcr@di.uminho.pt",
         "webpage": "http://www.di.uminho.pt/~jcr",
-        "numero": "750",
+        "numero": "746",
         "nivel": "docente",
         "ano": "",
         "cursos": [
             "Licenciatura em Engenharia Informática"
         ],
         "password": "1234",
-        "_id": "665ccad40386a85fbc15bf47",
+        "_id": "666d8c3e0386a84a006ccd68",
         "cadeiras": [
-            "665ccad40386a85fbc15bf46",
-            "665ccad40386a85fbc15bf48",
-            "665ccad40386a85fbc15bf4a"
+            "666d8c3e0386a84a006ccd67",
+            "666d8c3e0386a84a006ccd69",
+            "666d8c3e0386a84a006ccd6b"
         ]
     },
     {
@@ -26,16 +26,16 @@
         "categoria": "Professor Convidado",
         "filiacao": "Dep. Informática - Universidade do Minho",
         "email": "d13753@di.uminho.pt",
-        "numero": "762",
+        "numero": "915",
         "nivel": "docente",
         "ano": "",
         "cursos": [
             "Licenciatura em Engenharia Informática"
         ],
         "password": "1234",
-        "_id": "665ccad40386a85fbc15bf49",
+        "_id": "666d8c3e0386a84a006ccd6a",
         "cadeiras": [
-            "665ccad40386a85fbc15bf48"
+            "666d8c3e0386a84a006ccd69"
         ]
     },
     {
@@ -45,16 +45,16 @@
         "filiacao": "Dep. Informática - Universidade do Minho",
         "email": "lfc@di.uminho.pt",
         "webpage": "",
-        "numero": "163",
+        "numero": "595",
         "nivel": "docente",
         "ano": "",
         "cursos": [
             "Licenciatura em Engenharia Informática"
         ],
         "password": "1234",
-        "_id": "665ccad40386a85fbc15bf4b",
+        "_id": "666d8c3e0386a84a006ccd6c",
         "cadeiras": [
-            "665ccad40386a85fbc15bf4a"
+            "666d8c3e0386a84a006ccd6b"
         ]
     }
 ]

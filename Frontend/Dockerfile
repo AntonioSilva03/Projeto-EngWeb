@@ -1,9 +1,12 @@
-FROM node
+FROM node:22.1.0-alpine
 
-WORKDIR /frontend
+WORKDIR /app
+
+COPY package*.json ./
+
+RUN npm install
 
 COPY . .
-RUN npm install
 
 EXPOSE 7777
 

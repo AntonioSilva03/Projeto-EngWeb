@@ -1,4 +1,3 @@
-const axios = require('axios');
 var jwt = require('jsonwebtoken');
 
 module.exports.auth = (req, res, next) => {
@@ -10,6 +9,7 @@ module.exports.auth = (req, res, next) => {
             }
             else {
                 req.idUser = payload._id
+                req.email = payload.email
                 req.nivel = payload.level
                 next()
             }

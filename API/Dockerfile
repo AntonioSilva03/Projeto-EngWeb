@@ -1,9 +1,14 @@
-FROM node
+FROM node:22.1.0-alpine
 
-WORKDIR /api
+WORKDIR /app
+
+COPY package*.json ./
+
+RUN npm install
+
+RUN npm install mongoose
 
 COPY . .
-RUN npm install
 
 EXPOSE 7776
 

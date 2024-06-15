@@ -12,3 +12,16 @@ with open(file_path, 'r', encoding='utf-8') as f:
             print(f"User {user['nome']} registered successfully")
         else:
             print(f"User {user['nome']} registration failed")
+
+admin_url = 'http://localhost:7778/users/register/admin'
+
+admin = {
+    "nome": "Administrador",
+    "email": "admin@ucwebsites.com",
+    "password": "admin"
+}
+
+if requests.post(admin_url, json=admin, headers={'Content-Type': 'application/json'}):
+    print(f"User {admin['nome']} registered successfully")
+else:
+    print(f"User {admin['nome']} registration failed")

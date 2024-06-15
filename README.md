@@ -20,6 +20,12 @@
 - [API](API/README.md/#api)
 - [Servidor de Autenticação](Auth/README.md/#auth)
 
+## Introdução
+
+Este relatório surge no âmbito da Unidade Curricular de Engenharia Web, em que nos foi proposto a concepção de uma aplicação Web.
+
+A proposta de enunciado escolhida pelo grupo foi a criação de uma aplicação Web para a criação de sites para unidades curriculares. Nesta aplicação os docentes das UCs podem disponibilizar ficheiros, colocar informação sobre a UC (avaliação, horários, equipa docente) e fazer os sumários das aulas. Todos este conteúdo poderá ser consultado pelos alunos que ingressarem na UC.
+
 ## Objetivos
 
 - Analisar o dataset de uma UC fornecido e tratá-lo de modo a criar um modelo em MongoDB para o guardar;
@@ -31,8 +37,6 @@
 - Ter várias possibilidades de pesquisa sobre as UC criadas e ter uma interface centralizada para aceder ao site de cada uma;
 
 - Permitir que o utilizador que criou a UC edite a informação desta;
-
-- E o que a imaginação ditar...
 
 ## Utilizadores
 
@@ -48,7 +52,7 @@ nome, email, filiação (estudante, docente, curso, departamento, ...), nível (
 
 ## Tratamento de dados
 
-Foram fornecidos 3 datasets, cada um com informação de uma UC específica. Cada UC continha uma lista com docentes e os seus metadados. Achamos relevante ler os 3 datasets e criar 2 datasets novos: um com informação relativa às **UCs** e outro com todos os **docentes** encontrados. Através da criação de ids, cada UC passou a ter apenas o id dos seus docentes e cada docente tem uma lista com ids das UCs que leciona. Cada docente passou ainda a ter uma password que será usada no registo na plataforma. Para tal usou-se o script python:
+Foram fornecidos 3 datasets, cada um com informação de uma UC específica. Cada UC continha uma lista com docentes e os seus metadados. Achamos relevante ler os 3 datasets e criar 2 datasets novos: um com informação relativa às **UCs** e outro com todos os **docentes** encontrados. Através da criação de ids para os docentes e para as UCs, cada UC passou a ter apenas o id dos seus docentes e cada docente tem uma lista com ids das UCs que leciona. Cada docente passou ainda a ter uma password que será usada no registo na plataforma. Para tal usou-se o script python:
 
 ```bash
 # executar na diretoria data/
@@ -57,20 +61,19 @@ python read_datasets.py
 
 ## Setup
 
-Primeiro é necessário instalar as dependências do frontend, servidor de autenticação e da API. Na diretoria de cada um dos componetes usar o comando:
+1. Primeiro é necessário **instalar as dependências** do frontend, servidor de autenticação e da API. Na diretoria de cada um dos componetes usar o comando:
 
 ```bash
 npm install
 ```
 
-Para lançar o container docker da base de dados é necessário correr o script:
+2. Para lançar o **container docker** é necessário usar o comando:
 
 ```bash
-# executar na diretoria data/
-python launch_container.py ucWebsites ucs ./ucs.json 
+docker-compose up --build
 ```
 
-Todos os docentes presentes no dataset obtido deverão ser registados na plataforma. Para tal criou-se um script que faz pedidos ao servidor de autenticão:
+3. Todos os docentes presentes no dataset obtido deverão ser registados na plataforma. Para tal criou-se um script que faz pedidos de **registo** ao servidor de autenticão:
 
 ```bash
 # executar na diretoria data/
@@ -79,7 +82,7 @@ python register_users.py
 
 **Nota:** a password das contas importadas é "1234". Posteriormente o proprietário da conta poderá alterar a sua password.
 
-Para registar o admin pode ser feito um pedido ao servidor de autenticação com o body:
+O script anterior também trata do registo do admin fazendo um pedido de registo com o seguinte body:
 
 ```json
 {
@@ -87,4 +90,10 @@ Para registar o admin pode ser feito um pedido ao servidor de autenticação com
     "email": "admin@ucwebsites.com",
     "password": "admin"
 }
+```
+
+4. A interface da aplicação pode ser acessada num browser através do link:
+
+```
+http://localhost:7777/login
 ```

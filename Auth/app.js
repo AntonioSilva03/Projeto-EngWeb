@@ -7,7 +7,7 @@ var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 
 var mongoose = require('mongoose');
-var mongoDB = 'mongodb://localhost:27017/ucWebsites';
+var mongoDB = process.env.MONGODB_URL;
 mongoose.connect(mongoDB, {
     serverSelectionTimeoutMS: 5000
 });

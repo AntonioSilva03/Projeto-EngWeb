@@ -8,7 +8,7 @@ var indexRouter = require('./routes/index');
 var app = express();
 
 var mongoose = require('mongoose');
-var mongoDB = "mongodb://localhost:27017/ucWebsites";
+var mongoDB = process.env.MONGODB_URL;
 mongoose.connect(mongoDB);
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
