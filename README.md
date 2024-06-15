@@ -72,10 +72,9 @@ npm install
 docker-compose up --build
 ```
 
-3. Todos os docentes presentes no dataset obtido deverão ser registados na plataforma. Para tal criou-se um script que faz pedidos de **registo** ao servidor de autenticão:
+3. Todos os docentes presentes no dataset obtido deverão ser registados na plataforma. Para tal criou-se um script que faz pedidos de **registo** ao servidor de autenticão (executar na diretoria data/):
 
 ```bash
-# executar na diretoria data/
 python register_users.py
 ```
 
